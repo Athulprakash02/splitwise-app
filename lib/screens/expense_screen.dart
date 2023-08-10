@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:splitwise_app/functions/add_participant.dart';
-import 'package:splitwise_app/functions/db_functions.dart';
-import 'package:splitwise_app/model/participant_model.dart';
 import 'package:splitwise_app/screens/split_expense_screen.dart';
 import 'package:splitwise_app/screens/widgets/show_snackbar.dart';
 
@@ -27,18 +24,12 @@ class ExpenseScreen extends StatelessWidget {
         title: const Text('Expenses'),
         centerTitle: true,
       ),
-      body: ValueListenableBuilder(
-        valueListenable: participantNotifier,
-        builder:
-            (BuildContext ctx, List<ParticipantModel> participants, child) {
-                  fetchAllParticipants();
-
-          return Padding(
+      body: Padding(
             padding: EdgeInsets.all(size.width / 16),
             child: ListView.separated(
                 physics: const BouncingScrollPhysics(),
                 itemBuilder: (context, index) {
-                  final user = participants[index];
+                  // final user = participants[index];
                   // list.add(user);
                   return Container(
                     width: size.width,
@@ -60,20 +51,18 @@ class ExpenseScreen extends StatelessWidget {
                     child: Center(
                         child: ListTile(
                             title: Text(
-                              user.participantName,
+                              'user.participantName',
                               style: const TextStyle(fontSize: 20),
                             ),
                             trailing: Text(
-                              "₹${user.amount}",
+                              "₹${'user.amount'}",
                               style: const TextStyle(fontSize: 20),
                             ))),
                   );
                 },
                 separatorBuilder: (context, index) => const Divider(),
-                itemCount: participants.length),
-          );
-        },
-      ),
+                itemCount: 5),
+          ),
       persistentFooterButtons: [
         ElevatedButton.icon(
             onPressed: () {
@@ -104,9 +93,9 @@ class ExpenseScreen extends StatelessWidget {
                               showSnackBar(context, Colors.red,
                                   "Participant name can't be empty");
                             } else {
-                              onAddParticipantClicked(
-                                  _participantNameController.text.trim(),
-                                  context);
+                              // onAddParticipantClicked(
+                              //     _participantNameController.text.trim(),
+                              //     context);
                               
                               _participantNameController.clear();
                             }

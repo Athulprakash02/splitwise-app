@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hive_flutter/adapters.dart';
-import 'package:splitwise_app/functions/db_functions.dart';
-import 'package:splitwise_app/model/participant_model.dart';
+
 import 'package:splitwise_app/screens/expense_screen.dart';
 import 'package:splitwise_app/screens/widgets/show_snackbar.dart';
 
@@ -17,15 +15,15 @@ class SplitExpenseScreen extends StatefulWidget {
 class _SplitExpenseScreenState extends State<SplitExpenseScreen> {
   final TextEditingController _amountController = TextEditingController();
   final List<TextEditingController> _percentageControllers = [];
-  final list = participantNotifier.value.toList();
+  // final list = participantNotifier.value.toList();
   @override
   void initState() {
     super.initState();
 
-    print(list.length);
-    for (var i = 0; i < list.length; i++) {
-      _percentageControllers.add(TextEditingController());
-    }
+    // print(list.length);
+    // for (var i = 0; i < list.length; i++) {
+    //   _percentageControllers.add(TextEditingController());
+    // }
   }
 
   @override
@@ -60,14 +58,10 @@ class _SplitExpenseScreenState extends State<SplitExpenseScreen> {
             Expanded(
                 child: Padding(
               padding: EdgeInsets.symmetric(vertical: size.width / 10),
-              child: ValueListenableBuilder(
-                valueListenable: participantNotifier,
-                builder: (BuildContext ctx, List<ParticipantModel> participants,
-                    child) {
-                  return ListView.separated(
+              child:  ListView.separated(
                       physics: const BouncingScrollPhysics(),
                       itemBuilder: (context, index) {
-                        final user = participants[index];
+                        // final user = participants[index];
                         return Container(
                           width: size.width,
                           height: size.width * .22,
@@ -89,7 +83,7 @@ class _SplitExpenseScreenState extends State<SplitExpenseScreen> {
                           child: Center(
                               child: ListTile(
                                   title: Text(
-                                    user.participantName,
+                                    'user.participantName',
                                     style: const TextStyle(fontSize: 18),
                                   ),
                                   trailing: SizedBox(
@@ -109,9 +103,8 @@ class _SplitExpenseScreenState extends State<SplitExpenseScreen> {
                         );
                       },
                       separatorBuilder: (context, index) => const Divider(),
-                      itemCount: participants.length);
-                },
-              ),
+                      itemCount: 5)
+                
             ))
           ],
         ),
@@ -149,33 +142,33 @@ class _SplitExpenseScreenState extends State<SplitExpenseScreen> {
       }
     }
 
-    if (totalPercentage == 100) {
-      for (int i = 0; i < participantNotifier.value.length; i++) {
-        double percentage =
-            double.tryParse(_percentageControllers[i].text) ?? 0;
-        double sharedAmount = (totalAmount * percentage) / 100;
+    // if (totalPercentage == 100) {
+    //   for (int i = 0; i < participantNotifier.value.length; i++) {
+    //     double percentage =
+    //         double.tryParse(_percentageControllers[i].text) ?? 0;
+    //     double sharedAmount = (totalAmount * percentage) / 100;
 
-        // Update the participant's balance with the shared amount.
-        participantNotifier.value[i].amount += sharedAmount;
-      }
-      updateParticipantBalances(participantNotifier.value);
+    //     // Update the participant's balance with the shared amount.
+    //     participantNotifier.value[i].amount += sharedAmount;
+    //   }
+    //   updateParticipantBalances(participantNotifier.value);
 
-      _amountController.clear();
-      for (var controller in _percentageControllers) {
-        controller.clear();
-      }
-      return totalPercentage;
-    } else {
-      showSnackBar(context, Colors.red, "Total percentage should be 100.");
-    }
+    //   _amountController.clear();
+    //   for (var controller in _percentageControllers) {
+    //     controller.clear();
+    //   }
+    //   return totalPercentage;
+    // } else {
+    //   showSnackBar(context, Colors.red, "Total percentage should be 100.");
+    // }
     return 0;
   }
 
-  Future<void> updateParticipantBalances(
-      List<ParticipantModel> participants) async {
-    final participantBox = await Hive.openBox<ParticipantModel>('participants');
-    for (int i = 0; i < participants.length; i++) {
-      await participantBox.putAt(i, participants[i]);
-    }
-  }
+  // Future<void> updateParticipantBalances(
+  //     List<ParticipantModel> participants) async {
+  //   // final participantBox = await Hive.openBox<ParticipantModel>('participants');
+  //   // for (int i = 0; i < participants.length; i++) {
+  //   //   await participantBox.putAt(i, participants[i]);
+  //   // }
+  // }
 }

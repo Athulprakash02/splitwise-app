@@ -1,18 +1,11 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:hive_flutter/adapters.dart';
-
 import 'package:splitwise_app/core/theme.dart';
-import 'package:splitwise_app/model/participant_model.dart';
-import 'package:splitwise_app/screens/expense_screen.dart';
+import 'package:splitwise_app/screens/widgets/homescreen/home_screen.dart';
 
-Future<void> main(List<String> args) async {
-  await Hive.initFlutter();
-
-  if (!Hive.isAdapterRegistered(ParticipantModelAdapter().typeId)) {
-    Hive.registerAdapter(ParticipantModelAdapter());
-  }
-
-  await Hive.openBox<ParticipantModel>('participants');
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
@@ -22,11 +15,21 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Splitwise',
-      theme: theme,
-      home: ExpenseScreen(),
-    );
-    
+          debugShowCheckedModeBanner: false,
+          title: 'Splitwise',
+          theme: theme,
+          home: HomeScreen(),
+        );
+    // return MultiProvider(providers: [
+    //   ChangeNotifierProvider(
+    //     create: (context) => GroupProvider(),
+    //     child: MaterialApp(
+    //       debugShowCheckedModeBanner: false,
+    //       title: 'Splitwise',
+    //       theme: theme,
+    //       home: HomeScreen(),
+    //     ),
+    //   )
+    // ]);
   }
 }
