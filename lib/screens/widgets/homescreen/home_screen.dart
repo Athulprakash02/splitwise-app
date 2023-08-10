@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:splitwise_app/controllers/group_controller.dart';
@@ -23,55 +21,71 @@ class HomeScreen extends StatelessWidget {
         title: const Text('Home'),
         centerTitle: true,
       ),
-      body: Padding(
-            padding: EdgeInsets.all(size.width / 16),
-            child: ListView.separated(
-                physics: const BouncingScrollPhysics(),
-                itemBuilder: (ctx, index) {
-                  // final group = groups[index];
+      body: StreamBuilder<List<Group>>(
+        stream: fetchGroupsFromFirebaseStream(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return const Center(
+              child: Text('no groups available'),
+            );
+          } else {
+           
+            return Padding(
+              padding: EdgeInsets.all(size.width / 16),
+              child: ListView.separated(
+                  physics: const BouncingScrollPhysics(),
+                  itemBuilder: (ctx, index) {
+                    final  group = snapshot.data?[index];
 
-                  return Container(
-                    width: size.width,
-                    height: size.width*.22,
-                    decoration: BoxDecoration(
-                      color: Colors.white, // Container color
-                      borderRadius:
-                          BorderRadius.circular(8.0), // Rounded corners
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.5), // Shadow color
-                          spreadRadius: 1, // Spread radius
-                          blurRadius: 5, // Blur radius
-                          offset: const Offset(0, 2), // Offset in the x, y direction
+                    return Container(
+                      width: size.width,
+                      height: size.width * .22,
+                      decoration: BoxDecoration(
+                        color: Colors.white, // Container color
+                        borderRadius:
+                            BorderRadius.circular(8.0), // Rounded corners
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5), // Shadow color
+                            spreadRadius: 1, // Spread radius
+                            blurRadius: 5, // Blur radius
+                            offset: const Offset(
+                                0, 2), // Offset in the x, y direction
+                          ),
+                        ],
+                      ),
+                      child: Center(
+                          child: ListTile(
+                        onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) {
+                              return ExpenseScreen(group: group);
+                            },
+                          ));
+                        },
+                        leading: const CircleAvatar(
+                          radius: 25,
+                          backgroundImage:
+                              AssetImage('assets/images/icon image.png'),
                         ),
-                      ],
-                    ),
-                    child: Center(
-                        child: ListTile(
-                      onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) {
-                            return ExpenseScreen();
-                          },
-                        ));
-                      },
-                      leading: const CircleAvatar(
-                        radius: 25,
-                        backgroundImage:
-                            AssetImage('assets/images/icon image.png'),
-                      ),
-                      title: Text(
-                        'group.groupName',
-                        style: const TextStyle(fontSize: 20),
-                      ),
-                      style: ListTileStyle.drawer,
-                    )),
-                  );
-                },
-                separatorBuilder: (context, index) => const Divider(),
-                itemCount: 10),
-          ),
-        
+                        title: Text(
+                          group!.groupName,
+                          style: const TextStyle(fontSize: 20),
+                        ),
+                        style: ListTileStyle.drawer,
+                      )),
+                    );
+                  },
+                  separatorBuilder: (context, index) => const Divider(),
+                  itemCount: snapshot.data!.length),
+            );
+          }
+        },
+      ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           showDialog(
@@ -103,12 +117,14 @@ class HomeScreen extends StatelessWidget {
                           showSnackBar(
                               context, Colors.red, "Group name can't be empty");
                         } else {
-                          final _group = Group( name: _groupNameController.text.trim());
+                          final _group =
+                              Group(groupName: _groupNameController.text.trim());
                           await createGroup(_group);
-                        //  await groupProvider.createGroup(_group);
+                          //  await groupProvider.createGroup(_group);
                           // onCreateGroupClicked(
                           //     _groupNameController.text.trim(), context);
-                          // _groupNameController.clear();
+                          Navigator.of(context).pop();
+                          _groupNameController.clear();
                         }
                       },
                       child:

@@ -1,16 +1,16 @@
 
 class Group {
   final String? id;
-  final String name;
+  final String groupName;
 
   Group({
      this.id,
-    required this.name,
+    required this.groupName,
   });
 
   toJson() {
     return {
       // "id": id,
-      "name": name};
+      "group name": groupName};
   }
 }

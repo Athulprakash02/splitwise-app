@@ -113,11 +113,11 @@ class _SplitExpenseScreenState extends State<SplitExpenseScreen> {
           onPressed: () async {
             num total = splitExpense();
             if (total == 100) {
-              Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(
-                    builder: (context) => ExpenseScreen(),
-                  ),
-                  (route) => false);
+              // Navigator.of(context).pushAndRemoveUntil(
+              //     MaterialPageRoute(
+              //       builder: (context) => ExpenseScreen(),
+              //     ),
+              //     (route) => false);
               // Navigator.of(context).pushReplacement(MaterialPageRoute(
               //   builder: (context) => ExpenseScreen(
 

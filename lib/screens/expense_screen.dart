@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:splitwise_app/model/group%20model/group_model.dart';
 import 'package:splitwise_app/screens/split_expense_screen.dart';
 import 'package:splitwise_app/screens/widgets/show_snackbar.dart';
 
 class ExpenseScreen extends StatelessWidget {
   ExpenseScreen({
-    super.key,
+    super.key, required this.group,
   });
-  // final GroupModel group;
+  final Group group;
   // final int index;
 
   final TextEditingController _participantNameController =

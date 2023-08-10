@@ -1,11 +1,11 @@
 class Participants {
-  final String id;
+  final String? id;
   final String groupName;
   final String participantName;
   final double amount;
 
   Participants({
-    required this.id,
+     this.id,
     required this.groupName,
     required this.participantName,
     required this.amount,
@@ -14,7 +14,7 @@ class Participants {
 
   toJson() {
     return {
-      "id": id,
+      
       "group name": groupName,
       "partcipant names": participantName,
       "amount" : amount
