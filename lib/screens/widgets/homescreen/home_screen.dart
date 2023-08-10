@@ -118,7 +118,7 @@ class HomeScreen extends StatelessWidget {
                               context, Colors.red, "Group name can't be empty");
                         } else {
                           final _group =
-                              Group(groupName: _groupNameController.text.trim());
+                              Group(id:'',groupName:  _groupNameController.text.trim());
                           await createGroup(_group);
                           //  await groupProvider.createGroup(_group);
                           // onCreateGroupClicked(

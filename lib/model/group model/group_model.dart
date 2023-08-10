@@ -4,7 +4,7 @@ class Group {
   final String groupName;
 
   Group({
-     this.id,
+    required this.id,
     required this.groupName,
   });
 
