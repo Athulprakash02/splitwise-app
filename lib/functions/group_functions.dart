@@ -45,7 +45,7 @@ Future<void> createGroup(Group groupname) async {
     (QuerySnapshot snapshot) {
       List<Group> groups = [];
       for (var groupDoc in snapshot.docs) {
-        Group group = Group(id: groupDoc.id, groupName: groupDoc["group name"]);
+        Group group = Group(id: groupDoc.id, groupName: groupDoc["group name"],amount: groupDoc["amount"]);
         groups.add(group);
         print(group);
       }

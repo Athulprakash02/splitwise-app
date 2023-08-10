@@ -2,8 +2,10 @@
 class Group {
   final String? id;
   final String groupName;
+  final double amount;
 
-  Group({
+  Group( {
+    required this.amount,
     required this.id,
     required this.groupName,
   });
@@ -11,6 +13,7 @@ class Group {
   toJson() {
     return {
       // "id": id,
-      "group name": groupName};
+      "group name": groupName,
+      "amount": amount,};
   }
 }

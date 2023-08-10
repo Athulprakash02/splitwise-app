@@ -10,6 +10,7 @@ class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
 
   final TextEditingController _groupNameController = TextEditingController();
+  final TextEditingController _amountController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -95,12 +96,29 @@ class HomeScreen extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15)),
                 title: const Text('Create group'),
-                content: TextField(
-                  controller: _groupNameController,
-                  decoration: InputDecoration(
-                      hintText: 'Group name',
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20))),
+                content:SizedBox(
+                  height: size.width*.4,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                       TextField(
+                    controller: _groupNameController,
+                    decoration: InputDecoration(
+                        hintText: 'Group name',
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20))),
+                  ),
+                   TextField(
+                    controller: _amountController,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                        hintText: 'Enter amount',
+                        
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20))),
+                  ),
+                    ],
+                  ),
                 ),
                 actions: [
                   TextButton(
@@ -118,7 +136,7 @@ class HomeScreen extends StatelessWidget {
                               context, Colors.red, "Group name can't be empty");
                         } else {
                           final _group =
-                              Group(id:'',groupName:  _groupNameController.text.trim());
+                              Group(id:'',groupName:  _groupNameController.text.trim(),amount: double.parse(_amountController.text));
                           await createGroup(_group);
                           //  await groupProvider.createGroup(_group);
                           // onCreateGroupClicked(
