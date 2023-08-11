@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:splitwise_app/model/group%20model/group_model.dart';
+import 'package:splitwise_app/screens/expense_screen.dart';
+import 'package:splitwise_app/screens/widgets/homescreen/home_screen.dart';
 
 import 'widgets/details_edit_widget.dart';
 
@@ -27,18 +29,17 @@ class _EditDetailsScreenState extends State<EditDetailsScreen> {
     // TODO: implement initState
     super.initState();
     // groupName = widget.group.groupName;
-
     _groupNameController = TextEditingController(text: widget.group.groupName);
     _amountController =
         TextEditingController(text: widget.group.amount.toString());
     _amountPersonOneController = TextEditingController(
-        text: (widget.group.amountPersonOne * widget.group.amount / 100)
+        text: (widget.group.amountPersonOne / widget.group.amount * 100)
             .toString());
     _amountPersonTwoController = TextEditingController(
-        text: (widget.group.amountPersonTwo * widget.group.amount / 100)
+        text: (widget.group.amountPersonTwo / widget.group.amount * 100)
             .toString());
     _amountPersonThreeController = TextEditingController(
-        text: (widget.group.amountPersonThree * widget.group.amount / 100)
+        text: (widget.group.amountPersonThree / widget.group.amount * 100)
             .toString());
   }
 
@@ -94,16 +95,29 @@ class _EditDetailsScreenState extends State<EditDetailsScreen> {
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          Group updated = Group(
-              amount: double.parse(_amountController.text),
-              id: '',
-              groupName: _groupNameController.text.trim(),
-              amountPersonOne: double.parse(_amountPersonOneController.text),
-              amountPersonTwo: double.parse(_amountPersonTwoController.text),
-              amountPersonThree:
-                  double.parse(_amountPersonThreeController.text));
-          updateDate(updated, widget.group.groupName);
+        onPressed: () async{
+          print("aaaaaa ${_amountPersonOneController.text}");
+          double percentage = double.parse(_amountPersonOneController.text) +
+              double.parse(_amountPersonTwoController.text) +
+              double.parse(_amountPersonThreeController.text);
+          // double sharedAmount = (totalAmount * percentage) / 100;
+          print(percentage);
+          if (percentage == 100) {
+            Group updated = Group(
+                amount: double.parse(_amountController.text),
+                id: '',
+                groupName: _groupNameController.text.trim(),
+                amountPersonOne: double.parse(_amountPersonOneController.text),
+                amountPersonTwo: double.parse(_amountPersonTwoController.text),
+                amountPersonThree:
+                    double.parse(_amountPersonThreeController.text));
+           await updateDate(updated, widget.group.groupName);
+            Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(
+                  builder: (context) => HomeScreen(),
+                ),
+                (route) => false);
+          }
         },
         label: Text('Update details'),
         icon: Icon(Icons.update),
@@ -112,6 +126,13 @@ class _EditDetailsScreenState extends State<EditDetailsScreen> {
   }
 
   Future<void> updateDate(Group updatedGroup, String groupName) async {
+    double amountOne =
+        (updatedGroup.amountPersonOne / 100) * updatedGroup.amount;
+    double amountTwo =
+        (updatedGroup.amountPersonTwo / 100) * updatedGroup.amount;
+    double amountThree =
+        (updatedGroup.amountPersonThree / 100) * updatedGroup.amount;
+    print(amountOne);
     try {
       CollectionReference collectionRef =
           FirebaseFirestore.instance.collection('groups');
@@ -123,12 +144,10 @@ class _EditDetailsScreenState extends State<EditDetailsScreen> {
         Map<String, dynamic> updatedData = {
           "group name": updatedGroup.groupName,
           "amount": updatedGroup.amount,
-          "person one amount":
-              (updatedGroup.amountPersonOne / updatedGroup.amount) * 100,
-          "person two amount":
-              (updatedGroup.amountPersonTwo / updatedGroup.amount) * 100,
-          "person three amount":
-              (updatedGroup.amountPersonThree / updatedGroup.amount) * 100,
+          "person one amount": amountOne,
+
+          "person two amount": amountTwo,
+          "person three amount": amountThree,
           // Add other fields you want to update
         };
 

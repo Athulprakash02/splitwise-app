@@ -3,6 +3,7 @@ import 'package:splitwise_app/functions/participants_function.dart';
 import 'package:splitwise_app/model/group%20model/group_model.dart';
 import 'package:splitwise_app/model/participant_model.dart';
 import 'package:splitwise_app/screens/edit_details_screen.dart';
+import 'package:splitwise_app/screens/widgets/homescreen/home_screen.dart';
 
 class ExpenseScreen extends StatelessWidget {
   ExpenseScreen({
@@ -20,6 +21,9 @@ class ExpenseScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(group.groupName),
         centerTitle: true,
+        leading: IconButton(onPressed: () {
+          Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => HomeScreen(),), (route) => false);
+        }, icon: Icon(Icons.home)),
       ),
       body: FutureBuilder<List<Participants>>(
         future: fetchParticipantsFromFirebase(group.groupName),
