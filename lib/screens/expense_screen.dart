@@ -24,7 +24,7 @@ class ExpenseScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Expenses'),
+        title:  Text(group.groupName),
         centerTitle: true,
       ),
       body: FutureBuilder<List<Participants>>(
@@ -42,44 +42,59 @@ class ExpenseScreen extends StatelessWidget {
             List<Participants>? users = snapshot.data;
             return Padding(
               padding: EdgeInsets.all(size.width / 16),
-              child: ListView.separated(
-                  physics: const BouncingScrollPhysics(),
-                  itemBuilder: (context, index) {
-                    double value = group.amount / 3;
-                    String balanceAmount = value.toStringAsFixed(2);
-                    // final user = snapshot.data![index];
-                    // list.add(user);
-                    return Container(
-                      width: size.width,
-                      height: size.width * .22,
-                      decoration: BoxDecoration(
-                        color: Colors.white, // Container color
-                        borderRadius:
-                            BorderRadius.circular(8.0), // Rounded corners
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.5), // Shadow color
-                            spreadRadius: 1, // Spread radius
-                            blurRadius: 5, // Blur radius
-                            offset: const Offset(
-                                0, 2), // Offset in the x, y direction
-                          ),
-                        ],
-                      ),
-                      child: Center(
-                          child: ListTile(
-                              title: Text(
-                                "person ${index + 1}",
-                                style: const TextStyle(fontSize: 20),
-                              ),
-                              trailing: Text(
-                                "₹$balanceAmount",
-                                style: const TextStyle(fontSize: 20),
-                              ))),
-                    );
-                  },
-                  separatorBuilder: (context, index) => const Divider(),
-                  itemCount: 3),
+              child: Column(
+                
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                    Text('Total Amount',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),),
+                    // Spacer(),
+                    Text('₹${group.amount}',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold)),
+                  ],),
+                  SizedBox(height: size.width*.03,),
+                  Expanded(
+                    child: ListView.separated(
+                        physics: const BouncingScrollPhysics(),
+                        itemBuilder: (context, index) {
+                          double value = group.amount / 3;
+                          String balanceAmount = value.toStringAsFixed(2);
+                          // final user = snapshot.data![index];
+                          // list.add(user);
+                          return Container(
+                            width: size.width,
+                            height: size.width * .22,
+                            decoration: BoxDecoration(
+                              color: Colors.white, // Container color
+                              borderRadius:
+                                  BorderRadius.circular(8.0), // Rounded corners
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.5), // Shadow color
+                                  spreadRadius: 1, // Spread radius
+                                  blurRadius: 5, // Blur radius
+                                  offset: const Offset(
+                                      0, 2), // Offset in the x, y direction
+                                ),
+                              ],
+                            ),
+                            child: Center(
+                                child: ListTile(
+                                    title: Text(
+                                      "person ${index + 1}",
+                                      style: const TextStyle(fontSize: 20),
+                                    ),
+                                    trailing: Text(
+                                      "₹$balanceAmount",
+                                      style: const TextStyle(fontSize: 20),
+                                    ))),
+                          );
+                        },
+                        separatorBuilder: (context, index) => const Divider(),
+                        itemCount: 3),
+                  ),
+                ],
+              ),
             );
           }
         },
