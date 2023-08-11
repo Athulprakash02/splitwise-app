@@ -1,4 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:splitwise_app/functions/avatar_pick_function.dart';
 import 'package:splitwise_app/functions/group_functions.dart';
 import 'package:splitwise_app/model/group%20model/group_model.dart';
 import 'package:splitwise_app/screens/widgets/homescreen/home_screen.dart';
@@ -38,6 +42,25 @@ class _SplitExpenseScreenState extends State<SplitExpenseScreen> {
     super.dispose();
   }
 
+  
+  String? imagePath;
+  String? imageUrl;
+  Future<void> pickAvatar() async{
+  final XFile? imagePicked;
+  imagePicked = await ImagePicker().pickImage(source: ImageSource.gallery);
+
+  if(imagePicked!=null){
+    print('vann');
+    setState(() {
+      imagePath = imagePicked!.path;
+    });
+
+    imageUrl = await addAvatar(imagePicked);
+    
+  }
+}
+
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.sizeOf(context);
@@ -50,6 +73,14 @@ class _SplitExpenseScreenState extends State<SplitExpenseScreen> {
         padding: EdgeInsets.all(size.width / 16),
         child: Column(
           children: [
+
+             GestureDetector(
+              onTap: () => pickAvatar(),
+                        child:imagePath == null?  CircleAvatar(radius: size.width/10,
+                        backgroundImage:  AssetImage('assets/images/icon image.png'),): CircleAvatar(radius: 28,
+                        backgroundImage:  FileImage(File(imagePath!)),),
+                      ),
+                      SizedBox(height: size.width*.10,),
             TextField(
               controller: _amountController,
               keyboardType: TextInputType.number,
@@ -166,6 +197,7 @@ class _SplitExpenseScreenState extends State<SplitExpenseScreen> {
       Group newGroup = Group(
         amount: double.parse(_amountController.text.trim()),
         id: '',
+        imageAvatar: imageUrl!,
         groupName: widget.groupName,
         amountPersonOne: sharedAmounts[0],
         amountPersonTwo: sharedAmounts[1],

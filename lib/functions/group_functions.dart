@@ -18,7 +18,6 @@ Future<void> createGroup(Group groupname) async {
 }
 
 Future<List<Group>> fetchGroupsFromFirebase() async{
-  print('haii');
   List<Group> groups = [];
 
   try {
@@ -27,22 +26,21 @@ Future<List<Group>> fetchGroupsFromFirebase() async{
       Group group = Group(
             id: groupDoc.id,
             groupName: groupDoc["group name"],
+            imageAvatar: groupDoc["image avatar url"],
             amount: groupDoc["amount"],
             amountPersonOne: groupDoc["person one amount"],
             amountPersonTwo: groupDoc["person two amount"],
             amountPersonThree: groupDoc["person three amount"]);
       groups.add(group);
-      print(groups.length);
-      print(group.groupName);
 
     }
 
   }on FirebaseException catch (e) {
-    print(e.message);
+    
 
   }
-  print('sd');
-  // print(groups);
+  
+ 
   return groups;
 }
 // Stream<List<Group>> fetchGroupsFromFirebaseStream() {

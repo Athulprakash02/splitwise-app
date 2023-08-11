@@ -1,16 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:splitwise_app/functions/avatar_pick_function.dart';
 import 'package:splitwise_app/functions/group_functions.dart';
 import 'package:splitwise_app/model/group%20model/group_model.dart';
 import 'package:splitwise_app/screens/expense_screen.dart';
 import 'package:splitwise_app/screens/split_expense_screen.dart';
 import 'package:splitwise_app/screens/widgets/show_snackbar.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   HomeScreen({super.key});
 
-  final TextEditingController _groupNameController = TextEditingController();
-  // final TextEditingController _amountController = TextEditingController();
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
 
+
+
+class _HomeScreenState extends State<HomeScreen> {
+
+
+  final TextEditingController _groupNameController = TextEditingController();
+
+  // final TextEditingController _amountController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.sizeOf(context);
@@ -20,6 +31,11 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Home'),
         centerTitle: true,
+        actions: [
+          IconButton(onPressed: () {
+            // pickAvatar();
+          }, icon: Icon(Icons.image))
+        ],
       ),
       body: FutureBuilder<List<Group>>(
         future: fetchGroupsFromFirebase(),
@@ -67,13 +83,13 @@ class HomeScreen extends StatelessWidget {
                             },
                           ));
                         },
-                        leading: const CircleAvatar(
+                        leading:  CircleAvatar(
                           radius: 25,
                           backgroundImage:
-                              AssetImage('assets/images/icon image.png'),
+                             NetworkImage(groups![index].imageAvatar)
                         ),
                         title: Text(
-                          groups![index].groupName,
+                          groups[index].groupName,
                           style: const TextStyle(fontSize: 20),
                         ),
                         style: ListTileStyle.drawer,

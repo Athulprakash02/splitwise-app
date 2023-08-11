@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:splitwise_app/model/group%20model/group_model.dart';
-import 'package:splitwise_app/screens/expense_screen.dart';
 import 'package:splitwise_app/screens/widgets/homescreen/home_screen.dart';
 
 import 'widgets/details_edit_widget.dart';
@@ -16,19 +15,15 @@ class EditDetailsScreen extends StatefulWidget {
 
 class _EditDetailsScreenState extends State<EditDetailsScreen> {
   late final TextEditingController _groupNameController;
-  //  final groupName;
   late final TextEditingController _amountController;
   late final TextEditingController _amountPersonOneController;
-
   late final TextEditingController _amountPersonTwoController;
-
   late final TextEditingController _amountPersonThreeController;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    // groupName = widget.group.groupName;
     _groupNameController = TextEditingController(text: widget.group.groupName);
     _amountController =
         TextEditingController(text: widget.group.amount.toString());
@@ -48,7 +43,7 @@ class _EditDetailsScreenState extends State<EditDetailsScreen> {
     Size size = MediaQuery.sizeOf(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Edit Details'),
+        title: const Text('Edit Details'),
         centerTitle: true,
       ),
       body: ListView(
@@ -106,6 +101,7 @@ class _EditDetailsScreenState extends State<EditDetailsScreen> {
             Group updated = Group(
                 amount: double.parse(_amountController.text),
                 id: '',
+                imageAvatar: widget.group.imageAvatar,
                 groupName: _groupNameController.text.trim(),
                 amountPersonOne: double.parse(_amountPersonOneController.text),
                 amountPersonTwo: double.parse(_amountPersonTwoController.text),
@@ -119,8 +115,8 @@ class _EditDetailsScreenState extends State<EditDetailsScreen> {
                 (route) => false);
           }
         },
-        label: Text('Update details'),
-        icon: Icon(Icons.update),
+        label: const Text('Update details'),
+        icon: const Icon(Icons.update),
       ),
     );
   }
