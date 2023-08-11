@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:splitwise_app/functions/participants_function.dart';
 import 'package:splitwise_app/model/group%20model/group_model.dart';
 import 'package:splitwise_app/model/participant_model.dart';
+import 'package:splitwise_app/screens/edit_details_screen.dart';
 
 class ExpenseScreen extends StatelessWidget {
   ExpenseScreen({
@@ -102,6 +103,15 @@ class ExpenseScreen extends StatelessWidget {
             );
           }
         },
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => EditDetailsScreen(group: group),
+          ));
+        },
+        label: Text('Edit details'),
+        icon: Icon(Icons.edit),
       ),
       // persistentFooterButtons: [
       //   ElevatedButton.icon(
