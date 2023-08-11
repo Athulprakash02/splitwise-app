@@ -8,48 +8,60 @@
 //   Navigator.of(context).pop();
 // }
 
- import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../model/group model/group_model.dart';
+
 FirebaseFirestore firestore = FirebaseFirestore.instance;
 Future<void> createGroup(Group groupname) async {
-    await firestore.collection('groups').add(groupname.toJson());
+  await firestore.collection('groups').add(groupname.toJson());
 }
 
+Future<List<Group>> fetchGroupsFromFirebase() async{
+  print('haii');
+  List<Group> groups = [];
 
-// Future<List<Group>> fetchGroupsFromFirebase() async{
-//   print('haii');
-//   List<Group> groups = [];
+  try {
+    QuerySnapshot groupSnapshot = await firestore.collection('groups').get();
+    for(var groupDoc in groupSnapshot.docs){
+      Group group = Group(
+            id: groupDoc.id,
+            groupName: groupDoc["group name"],
+            amount: groupDoc["amount"],
+            amountPersonOne: groupDoc["person one amount"],
+            amountPersonTwo: groupDoc["person two amount"],
+            amountPersonThree: groupDoc["person three amount"]);
+      groups.add(group);
+      print(groups.length);
+      print(group.groupName);
 
-//   try {
-//     QuerySnapshot groupSnapshot = await firestore.collection('groups').get();
-//     for(var groupDoc in groupSnapshot.docs){
-//       Group group = Group(groupName: groupDoc["group name"]);
-//       groups.add(group);
+    }
 
-//     }
-      
+  }on FirebaseException catch (e) {
+    print(e.message);
 
-      
-//   }on FirebaseException catch (e) {
-//     print(e.message);
-      
-//   }
-//   print('sd');
-//   print(groups);
-//   return groups;
+  }
+  print('sd');
+  // print(groups);
+  return groups;
+}
+// Stream<List<Group>> fetchGroupsFromFirebaseStream() {
+//   print('object');
+//   return FirebaseFirestore.instance.collection('groups').snapshots().map(
+//     (QuerySnapshot snapshot) {
+//       List<Group> groups = [];
+//       for (var groupDoc in snapshot.docs) {
+//         Group group = Group(
+//             id: groupDoc.id,
+//             groupName: groupDoc["group name"],
+//             amount: groupDoc["amount"],
+//             amountPersonOne: groupDoc["person one amount"],
+//             amountPersonTwo: groupDoc["person two amount"],
+//             amountPersonThree: groupDoc["person three amount"]);
+//         groups.add(group);
+//         print(group);
+//       }
+//       return groups;
+//     },
+//   );
 // }
-  Stream<List<Group>> fetchGroupsFromFirebaseStream() {
-    print('object');
-  return FirebaseFirestore.instance.collection('groups').snapshots().map(
-    (QuerySnapshot snapshot) {
-      List<Group> groups = [];
-      for (var groupDoc in snapshot.docs) {
-        Group group = Group(id: groupDoc.id, groupName: groupDoc["group name"],amount: groupDoc["amount"]);
-        groups.add(group);
-        print(group);
-      }
-      return groups;
-    },
-  );
-}

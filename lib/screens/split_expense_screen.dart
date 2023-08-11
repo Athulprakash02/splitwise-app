@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
-
+import 'package:splitwise_app/functions/group_functions.dart';
+import 'package:splitwise_app/model/group%20model/group_model.dart';
 import 'package:splitwise_app/screens/expense_screen.dart';
 import 'package:splitwise_app/screens/widgets/show_snackbar.dart';
 
 class SplitExpenseScreen extends StatefulWidget {
   const SplitExpenseScreen({
     super.key,
+    required this.groupName,
   });
 
+  final String groupName;
   @override
   State<SplitExpenseScreen> createState() => _SplitExpenseScreenState();
 }
@@ -19,11 +22,12 @@ class _SplitExpenseScreenState extends State<SplitExpenseScreen> {
   @override
   void initState() {
     super.initState();
+    print(widget.groupName);
 
     // print(list.length);
-    // for (var i = 0; i < list.length; i++) {
-    //   _percentageControllers.add(TextEditingController());
-    // }
+    for (var i = 0; i < 3; i++) {
+      _percentageControllers.add(TextEditingController());
+    }
   }
 
   @override
@@ -57,55 +61,54 @@ class _SplitExpenseScreenState extends State<SplitExpenseScreen> {
             ),
             Expanded(
                 child: Padding(
-              padding: EdgeInsets.symmetric(vertical: size.width / 10),
-              child:  ListView.separated(
-                      physics: const BouncingScrollPhysics(),
-                      itemBuilder: (context, index) {
-                        // final user = participants[index];
-                        return Container(
-                          width: size.width,
-                          height: size.width * .22,
-                          decoration: BoxDecoration(
-                            color: Colors.white, // Container color
-                            borderRadius:
-                                BorderRadius.circular(8.0), // Rounded corners
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey
-                                    .withOpacity(0.5), // Shadow color
-                                spreadRadius: 1, // Spread radius
-                                blurRadius: 5, // Blur radius
-                                offset: const Offset(
-                                    0, 2), // Offset in the x, y direction
-                              ),
-                            ],
-                          ),
-                          child: Center(
-                              child: ListTile(
-                                  title: Text(
-                                    'user.participantName',
-                                    style: const TextStyle(fontSize: 18),
-                                  ),
-                                  trailing: SizedBox(
-                                    width: size.width * .15,
-                                    height: size.width * .2,
-                                    child: TextField(
-                                      keyboardType: TextInputType.number,
-                                      controller: _percentageControllers[index],
-                                      decoration: InputDecoration(
-                                          hintText: '%',
-                                          border: OutlineInputBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                          )),
+                    padding: EdgeInsets.symmetric(vertical: size.width / 10),
+                    child: ListView.separated(
+                        physics: const BouncingScrollPhysics(),
+                        itemBuilder: (context, index) {
+                          // final user = participants[index];
+                          return Container(
+                            width: size.width,
+                            height: size.width * .22,
+                            decoration: BoxDecoration(
+                              color: Colors.white, // Container color
+                              borderRadius:
+                                  BorderRadius.circular(8.0), // Rounded corners
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey
+                                      .withOpacity(0.5), // Shadow color
+                                  spreadRadius: 1, // Spread radius
+                                  blurRadius: 5, // Blur radius
+                                  offset: const Offset(
+                                      0, 2), // Offset in the x, y direction
+                                ),
+                              ],
+                            ),
+                            child: Center(
+                                child: ListTile(
+                                    title: Text(
+                                      "person ${index+1}",
+                                      style: const TextStyle(fontSize: 18),
                                     ),
-                                  ))),
-                        );
-                      },
-                      separatorBuilder: (context, index) => const Divider(),
-                      itemCount: 5)
-                
-            ))
+                                    trailing: SizedBox(
+                                      width: size.width * .15,
+                                      height: size.width * .2,
+                                      child: TextField(
+                                        keyboardType: TextInputType.number,
+                                        controller:
+                                            _percentageControllers[index],
+                                        decoration: InputDecoration(
+                                            hintText: '%',
+                                            border: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                            )),
+                                      ),
+                                    ))),
+                          );
+                        },
+                        separatorBuilder: (context, index) => const Divider(),
+                        itemCount: 3)))
           ],
         ),
       ),
@@ -113,6 +116,10 @@ class _SplitExpenseScreenState extends State<SplitExpenseScreen> {
           onPressed: () async {
             num total = splitExpense();
             if (total == 100) {
+              print(total);
+              for (int i = 0; i < 3; i++) {
+                print(_percentageControllers[i].text);
+              }
               // Navigator.of(context).pushAndRemoveUntil(
               //     MaterialPageRoute(
               //       builder: (context) => ExpenseScreen(),
@@ -121,7 +128,7 @@ class _SplitExpenseScreenState extends State<SplitExpenseScreen> {
               // Navigator.of(context).pushReplacement(MaterialPageRoute(
               //   builder: (context) => ExpenseScreen(
 
-              //   ),
+              //   )
               // ));
             } else {
               showSnackBar(
@@ -142,25 +149,38 @@ class _SplitExpenseScreenState extends State<SplitExpenseScreen> {
       }
     }
 
-    // if (totalPercentage == 100) {
-    //   for (int i = 0; i < participantNotifier.value.length; i++) {
-    //     double percentage =
-    //         double.tryParse(_percentageControllers[i].text) ?? 0;
-    //     double sharedAmount = (totalAmount * percentage) / 100;
+    if (totalPercentage == 100) {
+      List<double> sharedAmounts = [];
+      for (int i = 0; i < 3; i++) {
+        double percentage =
+            double.tryParse(_percentageControllers[i].text) ?? 0;
+        double sharedAmount = (totalAmount * percentage) / 100;
+        sharedAmounts.add(sharedAmount);
+        print(sharedAmount);
 
-    //     // Update the participant's balance with the shared amount.
-    //     participantNotifier.value[i].amount += sharedAmount;
-    //   }
-    //   updateParticipantBalances(participantNotifier.value);
+        // Update the participant's balance with the shared amount.
+        // participantNotifier.value[i].amount += sharedAmount;
+      }
+      print(widget.groupName);
+      // updateParticipantBalances(participantNotifier.value);
+      Group newGroup = Group(
+        amount: double.parse(_amountController.text.trim()),
+        id: '',
+        groupName: widget.groupName,
+        amountPersonOne: sharedAmounts[0],
+        amountPersonTwo: sharedAmounts[1],
+        amountPersonThree: sharedAmounts[2],
+      );
+      createGroup(newGroup);
 
-    //   _amountController.clear();
-    //   for (var controller in _percentageControllers) {
-    //     controller.clear();
-    //   }
-    //   return totalPercentage;
-    // } else {
-    //   showSnackBar(context, Colors.red, "Total percentage should be 100.");
-    // }
+      _amountController.clear();
+      for (var controller in _percentageControllers) {
+        controller.clear();
+      }
+      return totalPercentage;
+    } else {
+      showSnackBar(context, Colors.red, "Total percentage should be 100.");
+    }
     return 0;
   }
 

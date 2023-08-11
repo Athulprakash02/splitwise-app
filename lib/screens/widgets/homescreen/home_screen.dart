@@ -4,6 +4,7 @@ import 'package:splitwise_app/controllers/group_controller.dart';
 import 'package:splitwise_app/functions/group_functions.dart';
 import 'package:splitwise_app/model/group%20model/group_model.dart';
 import 'package:splitwise_app/screens/expense_screen.dart';
+import 'package:splitwise_app/screens/split_expense_screen.dart';
 import 'package:splitwise_app/screens/widgets/show_snackbar.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -22,25 +23,25 @@ class HomeScreen extends StatelessWidget {
         title: const Text('Home'),
         centerTitle: true,
       ),
-      body: StreamBuilder<List<Group>>(
-        stream: fetchGroupsFromFirebaseStream(),
+      body: FutureBuilder<List<Group>>(
+        future: fetchGroupsFromFirebase(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
               child: CircularProgressIndicator(),
             );
-          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          } else if (snapshot.hasError) {
             return const Center(
               child: Text('no groups available'),
             );
           } else {
-           
+            List<Group>? groups = snapshot.data;
             return Padding(
               padding: EdgeInsets.all(size.width / 16),
               child: ListView.separated(
                   physics: const BouncingScrollPhysics(),
                   itemBuilder: (ctx, index) {
-                    final  group = snapshot.data?[index];
+                    // final group = snapshot.data?[index];
 
                     return Container(
                       width: size.width,
@@ -64,7 +65,7 @@ class HomeScreen extends StatelessWidget {
                         onTap: () {
                           Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) {
-                              return ExpenseScreen(group: group);
+                              return ExpenseScreen(group:  groups[index]);
                             },
                           ));
                         },
@@ -74,7 +75,7 @@ class HomeScreen extends StatelessWidget {
                               AssetImage('assets/images/icon image.png'),
                         ),
                         title: Text(
-                          group!.groupName,
+                          groups![index].groupName,
                           style: const TextStyle(fontSize: 20),
                         ),
                         style: ListTileStyle.drawer,
@@ -96,29 +97,12 @@ class HomeScreen extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15)),
                 title: const Text('Create group'),
-                content:SizedBox(
-                  height: size.width*.4,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                       TextField(
-                    controller: _groupNameController,
-                    decoration: InputDecoration(
-                        hintText: 'Group name',
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20))),
-                  ),
-                   TextField(
-                    controller: _amountController,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                        hintText: 'Enter amount',
-                        
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20))),
-                  ),
-                    ],
-                  ),
+                content: TextField(
+                  controller: _groupNameController,
+                  decoration: InputDecoration(
+                      hintText: 'Group name',
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20))),
                 ),
                 actions: [
                   TextButton(
@@ -135,14 +119,18 @@ class HomeScreen extends StatelessWidget {
                           showSnackBar(
                               context, Colors.red, "Group name can't be empty");
                         } else {
-                          final _group =
-                              Group(id:'',groupName:  _groupNameController.text.trim(),amount: double.parse(_amountController.text));
-                          await createGroup(_group);
+                          // final _group = Group(
+                          //     id: '',
+                          //     groupName: _groupNameController.text.trim(),
+                          //     amount: double.parse(_amountController.text));
+                          // await createGroup(_group);
                           //  await groupProvider.createGroup(_group);
                           // onCreateGroupClicked(
                           //     _groupNameController.text.trim(), context);
-                          Navigator.of(context).pop();
-                          _groupNameController.clear();
+                          Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => SplitExpenseScreen(groupName: _groupNameController.text.trim()),
+                          ));
+                          // _groupNameController.clear();
                         }
                       },
                       child:

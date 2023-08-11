@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:splitwise_app/functions/participants_function.dart';
 import 'package:splitwise_app/model/group%20model/group_model.dart';
 import 'package:splitwise_app/model/participant_model.dart';
-import 'package:splitwise_app/screens/split_expense_screen.dart';
-import 'package:splitwise_app/screens/widgets/show_snackbar.dart';
 
 class ExpenseScreen extends StatelessWidget {
   ExpenseScreen({
@@ -17,6 +15,7 @@ class ExpenseScreen extends StatelessWidget {
   //     TextEditingController();
 
   // final List<ParticipantModel> list = [];
+  final List persons = ['one','two','three'];
 
   @override
   Widget build(BuildContext context) {
@@ -85,7 +84,7 @@ class ExpenseScreen extends StatelessWidget {
                                       style: const TextStyle(fontSize: 20),
                                     ),
                                     trailing: Text(
-                                      "₹$balanceAmount",
+                                      "₹${group.amountPersonOne}",
                                       style: const TextStyle(fontSize: 20),
                                     ))),
                           );
