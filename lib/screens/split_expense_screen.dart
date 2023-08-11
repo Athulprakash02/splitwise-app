@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:splitwise_app/functions/group_functions.dart';
 import 'package:splitwise_app/model/group%20model/group_model.dart';
-import 'package:splitwise_app/screens/expense_screen.dart';
+import 'package:splitwise_app/screens/widgets/homescreen/home_screen.dart';
 import 'package:splitwise_app/screens/widgets/show_snackbar.dart';
 
 class SplitExpenseScreen extends StatefulWidget {
@@ -120,11 +120,11 @@ class _SplitExpenseScreenState extends State<SplitExpenseScreen> {
               for (int i = 0; i < 3; i++) {
                 print(_percentageControllers[i].text);
               }
-              // Navigator.of(context).pushAndRemoveUntil(
-              //     MaterialPageRoute(
-              //       builder: (context) => ExpenseScreen(),
-              //     ),
-              //     (route) => false);
+              Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(
+                    builder: (context) => HomeScreen(),
+                  ),
+                  (route) => false);
               // Navigator.of(context).pushReplacement(MaterialPageRoute(
               //   builder: (context) => ExpenseScreen(
 

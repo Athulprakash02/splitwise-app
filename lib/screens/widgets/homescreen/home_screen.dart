@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:splitwise_app/controllers/group_controller.dart';
 import 'package:splitwise_app/functions/group_functions.dart';
 import 'package:splitwise_app/model/group%20model/group_model.dart';
 import 'package:splitwise_app/screens/expense_screen.dart';
@@ -11,7 +9,7 @@ class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
 
   final TextEditingController _groupNameController = TextEditingController();
-  final TextEditingController _amountController = TextEditingController();
+  // final TextEditingController _amountController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {

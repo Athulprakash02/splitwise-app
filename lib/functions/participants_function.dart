@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:splitwise_app/functions/group_functions.dart';
 import 'package:splitwise_app/model/participant_model.dart';
 
 FirebaseFirestore firestore = FirebaseFirestore.instance;
