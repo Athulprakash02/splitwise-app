@@ -16,6 +16,7 @@ class ExpenseScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.sizeOf(context);
+    print(group.path);
 
     return Scaffold(
       appBar: AppBar(

@@ -7,7 +7,7 @@ import 'package:splitwise_app/functions/group_functions.dart';
 import 'package:splitwise_app/model/group%20model/group_model.dart';
 import 'package:splitwise_app/screens/widgets/homescreen/home_screen.dart';
 import 'package:splitwise_app/screens/widgets/show_snackbar.dart';
-
+String? path;
 class SplitExpenseScreen extends StatefulWidget {
   const SplitExpenseScreen({
     super.key,
@@ -45,8 +45,10 @@ class _SplitExpenseScreenState extends State<SplitExpenseScreen> {
   
   String? imagePath;
   String? imageUrl;
+   XFile? imagePicked;
+  
   Future<void> pickAvatar() async{
-  final XFile? imagePicked;
+  
   imagePicked = await ImagePicker().pickImage(source: ImageSource.gallery);
 
   if(imagePicked!=null){
@@ -55,7 +57,7 @@ class _SplitExpenseScreenState extends State<SplitExpenseScreen> {
       imagePath = imagePicked!.path;
     });
 
-    imageUrl = await addAvatar(imagePicked);
+    
     
   }
 }
@@ -145,6 +147,7 @@ class _SplitExpenseScreenState extends State<SplitExpenseScreen> {
       ),
       floatingActionButton: FloatingActionButton.extended(
           onPressed: () async {
+            imageUrl = await addAvatar(imagePicked!);
             num total = splitExpense();
             if (total == 100) {
               print(total);
@@ -194,16 +197,19 @@ class _SplitExpenseScreenState extends State<SplitExpenseScreen> {
       }
       print(widget.groupName);
       // updateParticipantBalances(participantNotifier.value);
+      
       Group newGroup = Group(
         amount: double.parse(_amountController.text.trim()),
         id: '',
         imageAvatar: imageUrl!,
+        path: path!,
         groupName: widget.groupName,
         amountPersonOne: sharedAmounts[0],
         amountPersonTwo: sharedAmounts[1],
         amountPersonThree: sharedAmounts[2],
       );
       createGroup(newGroup);
+      path = '';
 
       _amountController.clear();
       for (var controller in _percentageControllers) {

@@ -25,6 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.sizeOf(context);
+    print(path);
     // final groupProvider = Provider.of<GroupProvider>(context,listen: false);
     // fetchAllGroups();
     return Scaffold(

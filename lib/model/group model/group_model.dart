@@ -3,6 +3,7 @@ class Group {
   final String groupName;
   final double amount;
   final String imageAvatar;
+  final String path;
   final double amountPersonOne;
   final double amountPersonTwo;
   final double amountPersonThree;
@@ -11,6 +12,7 @@ class Group {
     required this.amount,
     required this.id,
     required this.imageAvatar,
+    required this.path,
     required this.groupName,
     required this.amountPersonOne,
     required this.amountPersonTwo,
@@ -22,6 +24,7 @@ class Group {
       // "id": id,
       "group name": groupName,
       "amount": amount,
+      "image path": path,
       "image avatar url": imageAvatar,
       "person one amount": amountPersonOne,
       "person two amount": amountPersonTwo,

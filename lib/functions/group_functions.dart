@@ -27,6 +27,7 @@ Future<List<Group>> fetchGroupsFromFirebase() async{
             id: groupDoc.id,
             groupName: groupDoc["group name"],
             imageAvatar: groupDoc["image avatar url"],
+            path: groupDoc["image path"],
             amount: groupDoc["amount"],
             amountPersonOne: groupDoc["person one amount"],
             amountPersonTwo: groupDoc["person two amount"],

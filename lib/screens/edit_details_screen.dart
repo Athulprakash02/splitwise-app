@@ -1,6 +1,11 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:splitwise_app/functions/avatar_pick_function.dart';
 import 'package:splitwise_app/model/group%20model/group_model.dart';
+import 'package:splitwise_app/screens/split_expense_screen.dart';
 import 'package:splitwise_app/screens/widgets/homescreen/home_screen.dart';
 
 import 'widgets/details_edit_widget.dart';
@@ -38,6 +43,27 @@ class _EditDetailsScreenState extends State<EditDetailsScreen> {
             .toString());
   }
 
+
+  
+  String? imagePath;
+  String? imageUrl;
+   XFile? imagePicked;
+  
+  Future<void> pickAvatar() async{
+  
+  imagePicked = await ImagePicker().pickImage(source: ImageSource.gallery);
+
+  if(imagePicked!=null){
+    print('vann');
+    setState(() {
+      imagePath = imagePicked!.path;
+    });
+
+    
+    
+  }
+}
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.sizeOf(context);
@@ -52,6 +78,12 @@ class _EditDetailsScreenState extends State<EditDetailsScreen> {
             padding: EdgeInsets.all(size.width / 16),
             child: Column(
               children: [
+                 GestureDetector(
+              onTap: () => pickAvatar(),
+                        child:imagePath == null?  CircleAvatar(radius: size.width/10,
+                        backgroundImage:  NetworkImage(widget.group.imageAvatar),): CircleAvatar(radius: size.width/10,
+                        backgroundImage:  FileImage(File(imagePath!)),),
+                      ),
                 DetailsFeild(
                     amountController: _groupNameController,
                     text: 'Group name',
@@ -91,6 +123,10 @@ class _EditDetailsScreenState extends State<EditDetailsScreen> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () async{
+          
+          imageUrl =  imagePicked == null? widget.group.imageAvatar: await  addAvatar(imagePicked!);
+          await delete(widget.group.imageAvatar);
+          print(imageUrl);
           print("aaaaaa ${_amountPersonOneController.text}");
           double percentage = double.parse(_amountPersonOneController.text) +
               double.parse(_amountPersonTwoController.text) +
@@ -101,7 +137,8 @@ class _EditDetailsScreenState extends State<EditDetailsScreen> {
             Group updated = Group(
                 amount: double.parse(_amountController.text),
                 id: '',
-                imageAvatar: widget.group.imageAvatar,
+                imageAvatar: imageUrl?? widget.group.imageAvatar,
+                path: path ?? widget.group.path,
                 groupName: _groupNameController.text.trim(),
                 amountPersonOne: double.parse(_amountPersonOneController.text),
                 amountPersonTwo: double.parse(_amountPersonTwoController.text),
@@ -141,6 +178,7 @@ class _EditDetailsScreenState extends State<EditDetailsScreen> {
           "group name": updatedGroup.groupName,
           "amount": updatedGroup.amount,
           "person one amount": amountOne,
+          "image avatar url": updatedGroup.imageAvatar,
 
           "person two amount": amountTwo,
           "person three amount": amountThree,
