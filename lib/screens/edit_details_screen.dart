@@ -11,7 +11,7 @@ import 'package:splitwise_app/screens/widgets/homescreen/home_screen.dart';
 import 'widgets/details_edit_widget.dart';
 
 class EditDetailsScreen extends StatefulWidget {
-  EditDetailsScreen({super.key, required this.group});
+  const EditDetailsScreen({super.key, required this.group});
   final Group group;
 
   @override
@@ -27,7 +27,6 @@ class _EditDetailsScreenState extends State<EditDetailsScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _groupNameController = TextEditingController(text: widget.group.groupName);
     _amountController =
@@ -54,7 +53,6 @@ class _EditDetailsScreenState extends State<EditDetailsScreen> {
   imagePicked = await ImagePicker().pickImage(source: ImageSource.gallery);
 
   if(imagePicked!=null){
-    print('vann');
     setState(() {
       imagePath = imagePicked!.path;
     });
@@ -126,13 +124,10 @@ class _EditDetailsScreenState extends State<EditDetailsScreen> {
           
           imageUrl =  imagePicked == null? widget.group.imageAvatar: await  addAvatar(imagePicked!);
           await delete(widget.group.imageAvatar);
-          print(imageUrl);
-          print("aaaaaa ${_amountPersonOneController.text}");
           double percentage = double.parse(_amountPersonOneController.text) +
               double.parse(_amountPersonTwoController.text) +
               double.parse(_amountPersonThreeController.text);
           // double sharedAmount = (totalAmount * percentage) / 100;
-          print(percentage);
           if (percentage == 100) {
             Group updated = Group(
                 amount: double.parse(_amountController.text),
@@ -145,9 +140,10 @@ class _EditDetailsScreenState extends State<EditDetailsScreen> {
                 amountPersonThree:
                     double.parse(_amountPersonThreeController.text));
            await updateDate(updated, widget.group.groupName);
+            // ignore: use_build_context_synchronously
             Navigator.of(context).pushAndRemoveUntil(
                 MaterialPageRoute(
-                  builder: (context) => HomeScreen(),
+                  builder: (context) => const HomeScreen(),
                 ),
                 (route) => false);
           }
@@ -165,7 +161,6 @@ class _EditDetailsScreenState extends State<EditDetailsScreen> {
         (updatedGroup.amountPersonTwo / 100) * updatedGroup.amount;
     double amountThree =
         (updatedGroup.amountPersonThree / 100) * updatedGroup.amount;
-    print(amountOne);
     try {
       CollectionReference collectionRef =
           FirebaseFirestore.instance.collection('groups');
@@ -188,6 +183,7 @@ class _EditDetailsScreenState extends State<EditDetailsScreen> {
         double.parse(_amountPersonThreeController.text);
         await docSnapshot.reference.update(updatedData);
       }
+    // ignore: empty_catches
     } catch (e) {}
   }
 }

@@ -26,7 +26,6 @@ class _SplitExpenseScreenState extends State<SplitExpenseScreen> {
   @override
   void initState() {
     super.initState();
-    print(widget.groupName);
 
     // print(list.length);
     for (var i = 0; i < 3; i++) {
@@ -52,7 +51,6 @@ class _SplitExpenseScreenState extends State<SplitExpenseScreen> {
   imagePicked = await ImagePicker().pickImage(source: ImageSource.gallery);
 
   if(imagePicked!=null){
-    print('vann');
     setState(() {
       imagePath = imagePicked!.path;
     });
@@ -79,7 +77,7 @@ class _SplitExpenseScreenState extends State<SplitExpenseScreen> {
              GestureDetector(
               onTap: () => pickAvatar(),
                         child:imagePath == null?  CircleAvatar(radius: size.width/10,
-                        backgroundImage:  AssetImage('assets/images/icon image.png'),): CircleAvatar(radius: 28,
+                        backgroundImage:  const AssetImage('assets/images/icon image.png'),): CircleAvatar(radius: size.width/10,
                         backgroundImage:  FileImage(File(imagePath!)),),
                       ),
                       SizedBox(height: size.width*.10,),
@@ -150,13 +148,12 @@ class _SplitExpenseScreenState extends State<SplitExpenseScreen> {
             imageUrl = await addAvatar(imagePicked!);
             num total = splitExpense();
             if (total == 100) {
-              print(total);
               for (int i = 0; i < 3; i++) {
-                print(_percentageControllers[i].text);
               }
+              // ignore: use_build_context_synchronously
               Navigator.of(context).pushAndRemoveUntil(
                   MaterialPageRoute(
-                    builder: (context) => HomeScreen(),
+                    builder: (context) => const HomeScreen(),
                   ),
                   (route) => false);
               // Navigator.of(context).pushReplacement(MaterialPageRoute(
@@ -165,6 +162,7 @@ class _SplitExpenseScreenState extends State<SplitExpenseScreen> {
               //   )
               // ));
             } else {
+              // ignore: use_build_context_synchronously
               showSnackBar(
                   context, Colors.red, "Total percentage should be 100.");
             }
@@ -190,12 +188,10 @@ class _SplitExpenseScreenState extends State<SplitExpenseScreen> {
             double.tryParse(_percentageControllers[i].text) ?? 0;
         double sharedAmount = (totalAmount * percentage) / 100;
         sharedAmounts.add(sharedAmount);
-        print(sharedAmount);
 
         // Update the participant's balance with the shared amount.
         // participantNotifier.value[i].amount += sharedAmount;
       }
-      print(widget.groupName);
       // updateParticipantBalances(participantNotifier.value);
       
       Group newGroup = Group(

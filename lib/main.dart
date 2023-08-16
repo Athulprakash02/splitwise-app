@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           title: 'Splitwise',
           theme: theme,
-          home: HomeScreen(),
+          home: const HomeScreen(),
         );
     // return MultiProvider(providers: [
     //   ChangeNotifierProvider(

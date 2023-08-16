@@ -19,7 +19,7 @@ class DetailsFeild extends StatelessWidget {
         children: [
           Text(
             text,
-            style: TextStyle(fontSize: 16),
+            style: const TextStyle(fontSize: 16),
           ),
           TextField(
             controller: _amountController,

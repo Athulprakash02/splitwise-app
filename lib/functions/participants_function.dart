@@ -4,7 +4,6 @@ import 'package:splitwise_app/model/participant_model.dart';
 FirebaseFirestore firestore = FirebaseFirestore.instance;
 Future<void> createParticipant(
     String groupName, Participants participant) async {
-  print('keri');
 
   await firestore.collection('participants').add(participant.toJson());
 }
@@ -24,6 +23,7 @@ Future<List<Participants>> fetchParticipantsFromFirebase(
           amount: participantDoc["amount"]);
           participantList.add(user);
     }
+  // ignore: empty_catches
   } catch (e) {}
   return participantList;
 }

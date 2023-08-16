@@ -36,6 +36,7 @@ Future<List<Group>> fetchGroupsFromFirebase() async{
 
     }
 
+  // ignore: empty_catches, unused_catch_clause
   }on FirebaseException catch (e) {
     
 

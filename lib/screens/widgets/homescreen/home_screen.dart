@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:splitwise_app/functions/avatar_pick_function.dart';
 import 'package:splitwise_app/functions/group_functions.dart';
 import 'package:splitwise_app/model/group%20model/group_model.dart';
 import 'package:splitwise_app/screens/expense_screen.dart';
@@ -8,7 +6,7 @@ import 'package:splitwise_app/screens/split_expense_screen.dart';
 import 'package:splitwise_app/screens/widgets/show_snackbar.dart';
 
 class HomeScreen extends StatefulWidget {
-  HomeScreen({super.key});
+  const HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -25,18 +23,13 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.sizeOf(context);
-    print(path);
     // final groupProvider = Provider.of<GroupProvider>(context,listen: false);
     // fetchAllGroups();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Home'),
         centerTitle: true,
-        actions: [
-          IconButton(onPressed: () {
-            // pickAvatar();
-          }, icon: Icon(Icons.image))
-        ],
+       
       ),
       body: FutureBuilder<List<Group>>(
         future: fetchGroupsFromFirebase(),

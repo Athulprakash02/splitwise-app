@@ -15,10 +15,8 @@ Future<String> addAvatar(XFile imagePicked) async {
   Reference referenceImageToUpload = referenceDirImage.child(uniqueFileName);
 
   try {
-    print('keriiii');
     await referenceImageToUpload.putFile(File(imagePicked.path));
     String imageUrl = await referenceImageToUpload.getDownloadURL();
-    print(imageUrl);
     return imageUrl;
   } catch (e) {
     return "";
@@ -26,13 +24,11 @@ Future<String> addAvatar(XFile imagePicked) async {
 }
 
 Future<void> delete(String ref) async {
-  print('ethiii');
-  print(ref);
   // print(object)
  try {
     await FirebaseStorage.instance.refFromURL(ref).delete();
+ // ignore: unused_catch_clause, empty_catches
  }on FirebaseException catch (e) {
-  print(e.message.toString());
    
  }
 }

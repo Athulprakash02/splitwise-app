@@ -6,7 +6,7 @@ import 'package:splitwise_app/screens/edit_details_screen.dart';
 import 'package:splitwise_app/screens/widgets/homescreen/home_screen.dart';
 
 class ExpenseScreen extends StatelessWidget {
-  ExpenseScreen({
+  const ExpenseScreen({
     super.key,
     required this.group,
   });
@@ -16,15 +16,14 @@ class ExpenseScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.sizeOf(context);
-    print(group.path);
 
     return Scaffold(
       appBar: AppBar(
         title: Text(group.groupName),
         centerTitle: true,
         leading: IconButton(onPressed: () {
-          Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => HomeScreen(),), (route) => false);
-        }, icon: Icon(Icons.home)),
+          Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => const HomeScreen(),), (route) => false);
+        }, icon: const Icon(Icons.home)),
       ),
       body: FutureBuilder<List<Participants>>(
         future: fetchParticipantsFromFirebase(group.groupName),
@@ -115,8 +114,8 @@ class ExpenseScreen extends StatelessWidget {
             builder: (context) => EditDetailsScreen(group: group),
           ));
         },
-        label: Text('Edit details'),
-        icon: Icon(Icons.edit),
+        label: const Text('Edit details'),
+        icon: const Icon(Icons.edit),
       ),
       // persistentFooterButtons: [
       //   ElevatedButton.icon(
