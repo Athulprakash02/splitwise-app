@@ -1,10 +1,10 @@
  import 'package:flutter/material.dart';
 
-TextFormField loginTextFeild(TextEditingController controller,String label,TextInputType keyboardType,int length){
+TextFormField loginTextFeild(TextEditingController controller,String label,TextInputType keyboardType ){
     return TextFormField(
           controller: controller,
           keyboardType: keyboardType,
-          maxLength: length,
+          // maxLength: length,
           decoration: InputDecoration(
             
             border: OutlineInputBorder(
