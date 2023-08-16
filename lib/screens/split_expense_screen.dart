@@ -7,7 +7,9 @@ import 'package:splitwise_app/functions/group_functions.dart';
 import 'package:splitwise_app/model/group%20model/group_model.dart';
 import 'package:splitwise_app/screens/widgets/homescreen/home_screen.dart';
 import 'package:splitwise_app/screens/widgets/show_snackbar.dart';
+
 String? path;
+
 class SplitExpenseScreen extends StatefulWidget {
   const SplitExpenseScreen({
     super.key,
@@ -41,25 +43,19 @@ class _SplitExpenseScreenState extends State<SplitExpenseScreen> {
     super.dispose();
   }
 
-  
   String? imagePath;
   String? imageUrl;
-   XFile? imagePicked;
-  
-  Future<void> pickAvatar() async{
-  
-  imagePicked = await ImagePicker().pickImage(source: ImageSource.gallery);
+  XFile? imagePicked;
 
-  if(imagePicked!=null){
-    setState(() {
-      imagePath = imagePicked!.path;
-    });
+  Future<void> pickAvatar() async {
+    imagePicked = await ImagePicker().pickImage(source: ImageSource.gallery);
 
-    
-    
+    if (imagePicked != null) {
+      setState(() {
+        imagePath = imagePicked!.path;
+      });
+    }
   }
-}
-
 
   @override
   Widget build(BuildContext context) {
@@ -73,14 +69,22 @@ class _SplitExpenseScreenState extends State<SplitExpenseScreen> {
         padding: EdgeInsets.all(size.width / 16),
         child: Column(
           children: [
-
-             GestureDetector(
+            GestureDetector(
               onTap: () => pickAvatar(),
-                        child:imagePath == null?  CircleAvatar(radius: size.width/10,
-                        backgroundImage:  const AssetImage('assets/images/icon image.png'),): CircleAvatar(radius: size.width/10,
-                        backgroundImage:  FileImage(File(imagePath!)),),
-                      ),
-                      SizedBox(height: size.width*.10,),
+              child: imagePath == null
+                  ? CircleAvatar(
+                      radius: size.width / 10,
+                      backgroundImage:
+                          const AssetImage('assets/images/icon image.png'),
+                    )
+                  : CircleAvatar(
+                      radius: size.width / 10,
+                      backgroundImage: FileImage(File(imagePath!)),
+                    ),
+            ),
+            SizedBox(
+              height: size.width * .10,
+            ),
             TextField(
               controller: _amountController,
               keyboardType: TextInputType.number,
@@ -118,7 +122,7 @@ class _SplitExpenseScreenState extends State<SplitExpenseScreen> {
                             child: Center(
                                 child: ListTile(
                                     title: Text(
-                                      "person ${index+1}",
+                                      "person ${index + 1}",
                                       style: const TextStyle(fontSize: 18),
                                     ),
                                     trailing: SizedBox(
@@ -145,24 +149,34 @@ class _SplitExpenseScreenState extends State<SplitExpenseScreen> {
       ),
       floatingActionButton: FloatingActionButton.extended(
           onPressed: () async {
-            imageUrl = await addAvatar(imagePicked!);
-            num total = splitExpense();
-            if (total == 100) {
-              for (int i = 0; i < 3; i++) {
+            double totalPercentage = 0;
+            for (var controller in _percentageControllers) {
+              if (controller.text.isNotEmpty) {
+                totalPercentage += double.tryParse(controller.text) ?? 0;
               }
-              // ignore: use_build_context_synchronously
-              Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(
-                    builder: (context) => const HomeScreen(),
-                  ),
-                  (route) => false);
-              // Navigator.of(context).pushReplacement(MaterialPageRoute(
-              //   builder: (context) => ExpenseScreen(
+            }
+            if (totalPercentage == 100) {
+              imageUrl = await addAvatar(imagePicked!);
+              num total = splitExpense();
+              if (total == 100) {
+                for (int i = 0; i < 3; i++) {}
+                // ignore: use_build_context_synchronously
+                Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(
+                      builder: (context) => const HomeScreen(),
+                    ),
+                    (route) => false);
+                // Navigator.of(context).pushReplacement(MaterialPageRoute(
+                //   builder: (context) => ExpenseScreen(
 
-              //   )
-              // ));
+                //   )
+                // ));
+              } else {
+                // ignore: use_build_context_synchronously
+                showSnackBar(
+                    context, Colors.red, "Total percentage should be 100.");
+              }
             } else {
-              // ignore: use_build_context_synchronously
               showSnackBar(
                   context, Colors.red, "Total percentage should be 100.");
             }
@@ -193,7 +207,7 @@ class _SplitExpenseScreenState extends State<SplitExpenseScreen> {
         // participantNotifier.value[i].amount += sharedAmount;
       }
       // updateParticipantBalances(participantNotifier.value);
-      
+
       Group newGroup = Group(
         amount: double.parse(_amountController.text.trim()),
         id: '',

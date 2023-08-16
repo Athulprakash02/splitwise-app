@@ -42,25 +42,19 @@ class _EditDetailsScreenState extends State<EditDetailsScreen> {
             .toString());
   }
 
-
-  
   String? imagePath;
   String? imageUrl;
-   XFile? imagePicked;
-  
-  Future<void> pickAvatar() async{
-  
-  imagePicked = await ImagePicker().pickImage(source: ImageSource.gallery);
+  XFile? imagePicked;
 
-  if(imagePicked!=null){
-    setState(() {
-      imagePath = imagePicked!.path;
-    });
+  Future<void> pickAvatar() async {
+    imagePicked = await ImagePicker().pickImage(source: ImageSource.gallery);
 
-    
-    
+    if (imagePicked != null) {
+      setState(() {
+        imagePath = imagePicked!.path;
+      });
+    }
   }
-}
 
   @override
   Widget build(BuildContext context) {
@@ -76,12 +70,19 @@ class _EditDetailsScreenState extends State<EditDetailsScreen> {
             padding: EdgeInsets.all(size.width / 16),
             child: Column(
               children: [
-                 GestureDetector(
-              onTap: () => pickAvatar(),
-                        child:imagePath == null?  CircleAvatar(radius: size.width/10,
-                        backgroundImage:  NetworkImage(widget.group.imageAvatar),): CircleAvatar(radius: size.width/10,
-                        backgroundImage:  FileImage(File(imagePath!)),),
-                      ),
+                GestureDetector(
+                  onTap: () => pickAvatar(),
+                  child: imagePath == null
+                      ? CircleAvatar(
+                          radius: size.width / 10,
+                          backgroundImage:
+                              NetworkImage(widget.group.imageAvatar),
+                        )
+                      : CircleAvatar(
+                          radius: size.width / 10,
+                          backgroundImage: FileImage(File(imagePath!)),
+                        ),
+                ),
                 DetailsFeild(
                     amountController: _groupNameController,
                     text: 'Group name',
@@ -120,9 +121,10 @@ class _EditDetailsScreenState extends State<EditDetailsScreen> {
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () async{
-          
-          imageUrl =  imagePicked == null? widget.group.imageAvatar: await  addAvatar(imagePicked!);
+        onPressed: () async {
+          imageUrl = imagePicked == null
+              ? widget.group.imageAvatar
+              : await addAvatar(imagePicked!);
           await delete(widget.group.imageAvatar);
           double percentage = double.parse(_amountPersonOneController.text) +
               double.parse(_amountPersonTwoController.text) +
@@ -132,14 +134,14 @@ class _EditDetailsScreenState extends State<EditDetailsScreen> {
             Group updated = Group(
                 amount: double.parse(_amountController.text),
                 id: '',
-                imageAvatar: imageUrl?? widget.group.imageAvatar,
+                imageAvatar: imageUrl ?? widget.group.imageAvatar,
                 path: path ?? widget.group.path,
                 groupName: _groupNameController.text.trim(),
                 amountPersonOne: double.parse(_amountPersonOneController.text),
                 amountPersonTwo: double.parse(_amountPersonTwoController.text),
                 amountPersonThree:
                     double.parse(_amountPersonThreeController.text));
-           await updateDate(updated, widget.group.groupName);
+            await updateDate(updated, widget.group.groupName);
             // ignore: use_build_context_synchronously
             Navigator.of(context).pushAndRemoveUntil(
                 MaterialPageRoute(
@@ -172,6 +174,7 @@ class _EditDetailsScreenState extends State<EditDetailsScreen> {
         Map<String, dynamic> updatedData = {
           "group name": updatedGroup.groupName,
           "amount": updatedGroup.amount,
+          "image path": updatedGroup.path,
           "person one amount": amountOne,
           "image avatar url": updatedGroup.imageAvatar,
 
@@ -183,7 +186,7 @@ class _EditDetailsScreenState extends State<EditDetailsScreen> {
         double.parse(_amountPersonThreeController.text);
         await docSnapshot.reference.update(updatedData);
       }
-    // ignore: empty_catches
+      // ignore: empty_catches
     } catch (e) {}
   }
 }
