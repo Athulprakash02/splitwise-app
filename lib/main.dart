@@ -2,7 +2,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:splitwise_app/core/theme.dart';
 import 'package:splitwise_app/screens/login_screen.dart';
-import 'package:splitwise_app/screens/widgets/homescreen/home_screen.dart';
+import 'package:splitwise_app/screens/login_with_otp.dart';
+import 'package:splitwise_app/screens/homescreen/home_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

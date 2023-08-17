@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:splitwise_app/functions/auth.dart';
-import 'package:splitwise_app/screens/widgets/homescreen/home_screen.dart';
+import 'package:splitwise_app/screens/homescreen/home_screen.dart';
 import 'package:splitwise_app/screens/widgets/show_snackbar.dart';
 
 import 'widgets/login_textfeild.dart';

@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:splitwise_app/screens/login_with_otp.dart';
-import 'package:splitwise_app/screens/signup_screen.dart';
+import 'package:splitwise_app/screens/login_screen.dart';
 
 import 'widgets/textfeilds_email_login.dart';
 
-class LoginScreen extends StatelessWidget {
-  LoginScreen({super.key});
+class SignUpScreen extends StatelessWidget {
+  SignUpScreen({super.key});
   final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _paswordController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -19,8 +18,10 @@ class LoginScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset('assets/images/login.png',width: size.width*.4,),
-              SizedBox(height: size.width/20,),
+              //  Text('Sign up',style: TextStyle(fontSize: size.width/10,fontWeight: FontWeight.bold),),
+              // SizedBox(height: size.width/18,),
+              Image.asset('assets/images/signup.png',width: size.width*.5,),
+             
               TextFieldsEmailLogin(
                   label: 'Email',
                   controller: _emailController,
@@ -31,7 +32,7 @@ class LoginScreen extends StatelessWidget {
               ),
               TextFieldsEmailLogin(
                   label: 'Password',
-                  controller: _paswordController,
+                  controller: _passwordController,
                   keyboardType: TextInputType.text,
                   obsureText: true),
               SizedBox(
@@ -40,37 +41,28 @@ class LoginScreen extends StatelessWidget {
               ElevatedButton(
                   onPressed: () {},
                   child: const Text(
-                    'Login',
+                    'Sign Up',
                     style: TextStyle(fontSize: 16),
                   )),
               // SizedBox(height: size.width/18,),
-              TextButton(
-                  onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => LoginWithOtpScreen(),
-                    ));
-                  },
-                  child: Text(
-                    'Login with otp',
-                    style: TextStyle(fontSize: 17),
-                  )),
 
-              // SizedBox(height: size.width/20,),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Text(
-                    "Don't have an account?",
+                    "Already have an account?",
                     style: TextStyle(fontSize: 18),
                   ),
                   TextButton(
                       onPressed: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => SignUpScreen(),
-                        ));
+                        Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(
+                              builder: (context) => LoginScreen(),
+                            ),
+                            (route) => false);
                       },
                       child: const Text(
-                        'Sign up',
+                        'Login',
                         style: TextStyle(fontSize: 18),
                       ))
                 ],

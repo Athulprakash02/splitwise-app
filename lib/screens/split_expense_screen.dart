@@ -5,7 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:splitwise_app/functions/avatar_pick_function.dart';
 import 'package:splitwise_app/functions/group_functions.dart';
 import 'package:splitwise_app/model/group%20model/group_model.dart';
-import 'package:splitwise_app/screens/widgets/homescreen/home_screen.dart';
+import 'package:splitwise_app/screens/homescreen/home_screen.dart';
 import 'package:splitwise_app/screens/widgets/show_snackbar.dart';
 
 String? path;
