@@ -1,8 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:splitwise_app/functions/group_functions.dart';
 import 'package:splitwise_app/model/group%20model/group_model.dart';
 import 'package:splitwise_app/screens/expense_screen.dart';
+import 'package:splitwise_app/screens/login_screen.dart';
 import 'package:splitwise_app/screens/split_expense_screen.dart';
+import 'package:splitwise_app/screens/web_view.dart';
 import 'package:splitwise_app/screens/widgets/show_snackbar.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -12,11 +15,7 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-
-
 class _HomeScreenState extends State<HomeScreen> {
-
-
   final TextEditingController _groupNameController = TextEditingController();
 
   // final TextEditingController _amountController = TextEditingController();
@@ -27,9 +26,29 @@ class _HomeScreenState extends State<HomeScreen> {
     // fetchAllGroups();
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+            onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) =>  const WebView(),
+              ));
+            },
+            icon: const Icon(Icons.language)),
         title: const Text('Home'),
         centerTitle: true,
-       
+        actions: [
+          IconButton(
+              onPressed: () async {
+                await FirebaseAuth.instance.signOut().then((value) {
+                  Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => LoginScreen(),
+                      ),
+                      (route) => false);
+                });
+              },
+              icon: const Icon(Icons.logout))
+        ],
       ),
       body: FutureBuilder<List<Group>>(
         future: fetchGroupsFromFirebase(),
@@ -73,15 +92,14 @@ class _HomeScreenState extends State<HomeScreen> {
                         onTap: () {
                           Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) {
-                              return ExpenseScreen(group:  groups[index]);
+                              return ExpenseScreen(group: groups[index]);
                             },
                           ));
                         },
-                        leading:  CircleAvatar(
-                          radius: 25,
-                          backgroundImage:
-                             NetworkImage(groups![index].imageAvatar)
-                        ),
+                        leading: CircleAvatar(
+                            radius: 25,
+                            backgroundImage:
+                                NetworkImage(groups![index].imageAvatar)),
                         title: Text(
                           groups[index].groupName,
                           style: const TextStyle(fontSize: 20),
@@ -136,7 +154,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           // onCreateGroupClicked(
                           //     _groupNameController.text.trim(), context);
                           Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => SplitExpenseScreen(groupName: _groupNameController.text.trim()),
+                            builder: (context) => SplitExpenseScreen(
+                                groupName: _groupNameController.text.trim()),
                           ));
                           // _groupNameController.clear();
                         }

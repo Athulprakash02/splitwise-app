@@ -27,6 +27,7 @@ class LoginWithOtpScreen extends StatelessWidget {
                 onPressed: () async {
                   await phoneAuthentication(
                       _phoneNumberController.text, context);
+                  // ignore: use_build_context_synchronously
                   Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => OTPScreen(),
                   ));

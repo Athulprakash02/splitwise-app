@@ -20,7 +20,7 @@ class OTPScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             loginTextFeild(_otpController, 'Otp', TextInputType.phone, ),
-            SizedBox(
+            const SizedBox(
               height: 15,
             ),
             ElevatedButton(
@@ -29,14 +29,14 @@ class OTPScreen extends StatelessWidget {
                     await verifyOTP(_otpController.text.trim()).then(
                         (value) => Navigator.of(context).pushAndRemoveUntil(
                             MaterialPageRoute(
-                              builder: (context) => HomeScreen(),
+                              builder: (context) => const HomeScreen(),
                             ),
                             (route) => false));
                   } on FirebaseAuthException catch (e) {
                     showSnackBar(context, Colors.red, e.message.toString());
                   }
                 },
-                child: Text(
+                child: const Text(
                   'Login',
                   style: TextStyle(fontSize: 16),
                 ))
