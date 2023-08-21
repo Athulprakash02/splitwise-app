@@ -20,16 +20,14 @@ AndroidNotificationChannel channel = const AndroidNotificationChannel(
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
-Future<void> _firebaseMessagingBakgroundHAndler(RemoteMessage message) async {
+Future<void> _firebaseMessagingBakgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
-  print('bg message : ${message.messageId}');
 }
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  FirebaseMessaging.onBackgroundMessage(
-      (message) => _firebaseMessagingBakgroundHAndler(message));
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBakgroundHandler);
 
   await flutterLocalNotificationsPlugin
       .resolvePlatformSpecificImplementation<
@@ -59,7 +57,7 @@ class MyApp extends StatelessWidget {
           theme: theme,
           locale: provider.locale,
           supportedLocales: L10n.all,
-          localizationsDelegates: [
+          localizationsDelegates: const [
             AppLocalizations.delegate,
             GlobalMaterialLocalizations.delegate,
             GlobalCupertinoLocalizations.delegate,

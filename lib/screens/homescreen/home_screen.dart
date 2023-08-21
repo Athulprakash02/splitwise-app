@@ -23,7 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
+    
     super.initState();
     FirebaseMessaging.onMessage.listen(
       (RemoteMessage message) {
@@ -48,7 +48,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
           FirebaseMessaging.onMessageOpenedApp.listen(
             (RemoteMessage message) {
-              print('new message published');
               RemoteNotification? notification = message.notification;
               AndroidNotification? android = message.notification?.android;
               if (notification != null && android != null) {
@@ -108,8 +107,6 @@ class _HomeScreenState extends State<HomeScreen> {
         actions: [
           IconButton(
               onPressed: () async {
-                String? fcmKey = await FirebaseMessaging.instance.getToken();
-                print("fcmKey  $fcmKey");
 
                 showNotification();
 

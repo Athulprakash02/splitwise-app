@@ -64,7 +64,7 @@ class LoginScreen extends StatelessWidget {
                     },
                     child: Text(
                       AppLocalizations.of(context)!.login,
-                      style: TextStyle(fontSize: 16),
+                      style: const TextStyle(fontSize: 16),
                     )),
                 // SizedBox(height: size.width/18,),
                 TextButton(
@@ -75,7 +75,7 @@ class LoginScreen extends StatelessWidget {
                     },
                     child: AutoSizeText(
                       AppLocalizations.of(context)!.loginWithOtp,
-                      style: TextStyle(fontSize: 18),
+                      style: const TextStyle(fontSize: 18),
                       maxLines: 1,
                     )),
 
@@ -85,7 +85,7 @@ class LoginScreen extends StatelessWidget {
                   children: [
                     Text(
                       AppLocalizations.of(context)!.dontHaveAnAcc,
-                      style: TextStyle(fontSize: 16),
+                      style: const TextStyle(fontSize: 16),
                     ),
                     TextButton(
                         onPressed: () {
@@ -95,7 +95,7 @@ class LoginScreen extends StatelessWidget {
                         },
                         child: Text(
                           AppLocalizations.of(context)!.singup,
-                          style: TextStyle(fontSize: 16),
+                          style: const TextStyle(fontSize: 16),
                         ))
                   ],
                 ),
@@ -104,19 +104,19 @@ class LoginScreen extends StatelessWidget {
                   children: [
                     TextButton(
                         onPressed: () {
-                          provider.setLocale(Locale('en'));
+                          provider.setLocale(const Locale('en'));
                         },
-                        child: Text('English')),
+                        child: const Text('English')),
                     TextButton(
                         onPressed: () {
-                          provider.setLocale(Locale('ml'));
+                          provider.setLocale(const Locale('ml'));
                         },
-                        child: Text('Malayalam')),
+                        child: const Text('Malayalam')),
                     TextButton(
                         onPressed: () {
-                          provider.setLocale(Locale('hi'));
+                          provider.setLocale(const Locale('hi'));
                         },
-                        child: Text('Hindi'))
+                        child: const Text('Hindi'))
                   ],
                 ),
               ],

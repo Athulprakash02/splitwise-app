@@ -60,7 +60,7 @@ class SignUpScreen extends StatelessWidget {
                     },
                     child:  Text(
                       AppLocalizations.of(context)!.singup,
-                      style: TextStyle(fontSize: 16),
+                      style: const TextStyle(fontSize: 16),
                     )),
                 // SizedBox(height: size.width/18,),
 
@@ -69,7 +69,7 @@ class SignUpScreen extends StatelessWidget {
                   children: [
                      Text(
                       AppLocalizations.of(context)!.alreadyHaveAnAcc,
-                      style: TextStyle(fontSize: 16),
+                      style: const TextStyle(fontSize: 16),
                     ),
                     TextButton(
                         onPressed: () {
@@ -81,7 +81,7 @@ class SignUpScreen extends StatelessWidget {
                         },
                         child:  Text(
                           AppLocalizations.of(context)!.login,
-                          style: TextStyle(fontSize: 18),
+                          style: const TextStyle(fontSize: 18),
                         ))
                   ],
                 )
