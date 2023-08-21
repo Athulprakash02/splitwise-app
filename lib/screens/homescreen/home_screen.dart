@@ -7,8 +7,8 @@ import 'package:splitwise_app/main.dart';
 import 'package:splitwise_app/model/group%20model/group_model.dart';
 import 'package:splitwise_app/screens/expense_screen.dart';
 import 'package:splitwise_app/screens/login_screen.dart';
+import 'package:splitwise_app/screens/speech_to_text.dart';
 import 'package:splitwise_app/screens/split_expense_screen.dart';
-import 'package:splitwise_app/screens/web_view.dart';
 import 'package:splitwise_app/screens/widgets/show_snackbar.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -23,7 +23,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    
     super.initState();
     FirebaseMessaging.onMessage.listen(
       (RemoteMessage message) {
@@ -97,8 +96,11 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         leading: IconButton(
             onPressed: () {
+              // Navigator.of(context).push(MaterialPageRoute(
+              //   builder: (context) => const WebView(),
+              // ));
               Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => const WebView(),
+                builder: (context) => const SpeechToTextScreen(),
               ));
             },
             icon: const Icon(Icons.language)),
@@ -107,14 +109,13 @@ class _HomeScreenState extends State<HomeScreen> {
         actions: [
           IconButton(
               onPressed: () async {
-
                 showNotification();
 
                 await FirebaseAuth.instance.signOut().then((value) {
                   Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => LoginScreen(), 
+                        builder: (context) => LoginScreen(),
                       ),
                       (route) => false);
                 });
