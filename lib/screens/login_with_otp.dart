@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:splitwise_app/functions/auth.dart';
 import 'package:splitwise_app/screens/otp_screen.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'widgets/login_textfeild.dart';
 
 class LoginWithOtpScreen extends StatelessWidget {
@@ -18,7 +18,7 @@ class LoginWithOtpScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            loginTextFeild(_phoneNumberController, 'Phone number',
+            loginTextFeild(_phoneNumberController, AppLocalizations.of(context)!.phoneNumber,
                 TextInputType.phone, ),
             const SizedBox(
               height: 15,

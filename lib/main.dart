@@ -2,8 +2,13 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:provider/provider.dart';
+import 'package:splitwise_app/controllers/locale_provider.dart';
 import 'package:splitwise_app/core/theme.dart';
+import 'package:splitwise_app/l10n/l10n.dart';
 import 'package:splitwise_app/screens/auth_wrapper.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 AndroidNotificationChannel channel = const AndroidNotificationChannel(
   'high_importance_channel',
@@ -44,11 +49,25 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Splitwise',
-      theme: theme,
-      home: const AuthWrapper(),
+    return ChangeNotifierProvider(
+      create: (context) => LocaleProvider(),
+      builder: (context, child) {
+        final provider = Provider.of<LocaleProvider>(context);
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'Splitwise',
+          theme: theme,
+          locale: provider.locale,
+          supportedLocales: L10n.all,
+          localizationsDelegates: [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+          ],
+          home: const AuthWrapper(),
+        );
+      },
     );
     // return MultiProvider(providers: [
     //   ChangeNotifierProvider(

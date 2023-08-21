@@ -1,7 +1,11 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:splitwise_app/controllers/locale_provider.dart';
 import 'package:splitwise_app/functions/auth.dart';
 import 'package:splitwise_app/screens/login_with_otp.dart';
 import 'package:splitwise_app/screens/signup_screen.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'widgets/textfeilds_email_login.dart';
 
@@ -12,6 +16,7 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<LocaleProvider>(context);
     Size size = MediaQuery.sizeOf(context);
     return Scaffold(
       body: Center(
@@ -21,10 +26,15 @@ class LoginScreen extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.asset('assets/images/login.png',width: size.width*.4,),
-                SizedBox(height: size.width/20,),
+                Image.asset(
+                  'assets/images/login.png',
+                  width: size.width * .4,
+                ),
+                SizedBox(
+                  height: size.width / 20,
+                ),
                 TextFieldsEmailLogin(
-                    label: 'Email',
+                    label: AppLocalizations.of(context)!.email,
                     controller: _emailController,
                     keyboardType: TextInputType.emailAddress,
                     obsureText: false),
@@ -32,7 +42,7 @@ class LoginScreen extends StatelessWidget {
                   height: size.width / 16,
                 ),
                 TextFieldsEmailLogin(
-                    label: 'Password',
+                    label: AppLocalizations.of(context)!.password,
                     controller: _paswordController,
                     keyboardType: TextInputType.text,
                     obsureText: true),
@@ -41,7 +51,7 @@ class LoginScreen extends StatelessWidget {
                 ),
                 ElevatedButton(
                     onPressed: () {
-                       if (_emailController.text.trim().isNotEmpty &&
+                      if (_emailController.text.trim().isNotEmpty &&
                           _paswordController.text.trim().length >= 6) {
                         loginWithEmailAndPassword(
                             email: _emailController.text.trim(),
@@ -52,8 +62,8 @@ class LoginScreen extends StatelessWidget {
                             _paswordController.text.trim(), context);
                       }
                     },
-                    child: const Text(
-                      'Login',
+                    child: Text(
+                      AppLocalizations.of(context)!.login,
                       style: TextStyle(fontSize: 16),
                     )),
                 // SizedBox(height: size.width/18,),
@@ -63,18 +73,19 @@ class LoginScreen extends StatelessWidget {
                         builder: (context) => LoginWithOtpScreen(),
                       ));
                     },
-                    child: const Text(
-                      'Login with otp',
-                      style: TextStyle(fontSize: 17),
+                    child: AutoSizeText(
+                      AppLocalizations.of(context)!.loginWithOtp,
+                      style: TextStyle(fontSize: 18),
+                      maxLines: 1,
                     )),
-          
+
                 // SizedBox(height: size.width/20,),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text(
-                      "Don't have an account?",
-                      style: TextStyle(fontSize: 18),
+                    Text(
+                      AppLocalizations.of(context)!.dontHaveAnAcc,
+                      style: TextStyle(fontSize: 16),
                     ),
                     TextButton(
                         onPressed: () {
@@ -82,12 +93,32 @@ class LoginScreen extends StatelessWidget {
                             builder: (context) => SignUpScreen(),
                           ));
                         },
-                        child: const Text(
-                          'Sign up',
-                          style: TextStyle(fontSize: 18),
+                        child: Text(
+                          AppLocalizations.of(context)!.singup,
+                          style: TextStyle(fontSize: 16),
                         ))
                   ],
-                )
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TextButton(
+                        onPressed: () {
+                          provider.setLocale(Locale('en'));
+                        },
+                        child: Text('English')),
+                    TextButton(
+                        onPressed: () {
+                          provider.setLocale(Locale('ml'));
+                        },
+                        child: Text('Malayalam')),
+                    TextButton(
+                        onPressed: () {
+                          provider.setLocale(Locale('hi'));
+                        },
+                        child: Text('Hindi'))
+                  ],
+                ),
               ],
             ),
           ),

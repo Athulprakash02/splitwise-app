@@ -1,0 +1,13 @@
+{
+    "language": "हिन्दी",
+    "login": "लॉग इन",
+    "singup": "साइन अप",
+    "email": "ईमेल",
+    "password": "पासवर्ड",
+    "loginWithOtp": "ओटीपी से लॉगिन करें",
+    "dontHaveAnAcc": "कोई खाता नहीं है?",
+    "alreadyHaveAnAcc": "क्या आपके पास पहले से एक खाता मौजूद है?",
+    "phoneNumber": "फ़ोन नंबर",
+    "sendOtp": "OTP भेजें"
+
+}

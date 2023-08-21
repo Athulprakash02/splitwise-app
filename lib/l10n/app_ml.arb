@@ -1,0 +1,13 @@
+{
+    "language": "മലയാളം",
+    "login": "ലോഗിൻ",
+    "singup": "സൈൻ അപ്പ്",
+    "email": "ഇമെയിൽ",
+    "password": "പാസ്വേഡ്",
+    "loginWithOtp": "ഒടിപി ഉപയോഗിച്ച് ലോഗിൻ ചെയ്യുക",
+    "dontHaveAnAcc": "അക്കൗണ്ട് ഇല്ലേ?",
+    "alreadyHaveAnAcc": "അക്കൗണ്ട് ഉണ്ടോ?",
+    "phoneNumber": "ഫോൺ നമ്പർ",
+    "sendOtp": "OTP അയയ്ക്കുക"
+
+}

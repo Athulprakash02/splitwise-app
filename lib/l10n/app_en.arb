@@ -1,0 +1,15 @@
+{
+    "language": "English",
+    "@language":{
+        "description": "The current Langauge"
+    },
+    "login": "Login",
+    "singup": "Sign Up",
+    "email": "Email",
+    "password": "Password",
+    "loginWithOtp": "Login with otp",
+    "dontHaveAnAcc": "Don't have an account?",
+    "alreadyHaveAnAcc": "Already have an account?",
+    "phoneNumber": "Phone number",
+    "sendOtp": "Send OTP"
+}

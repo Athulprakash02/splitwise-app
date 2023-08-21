@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:splitwise_app/functions/auth.dart';
 import 'package:splitwise_app/screens/login_screen.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'widgets/textfeilds_email_login.dart';
 
@@ -28,7 +29,7 @@ class SignUpScreen extends StatelessWidget {
                 ),
 
                 TextFieldsEmailLogin(
-                    label: 'Email',
+                    label: AppLocalizations.of(context)!.email,
                     controller: _emailController,
                     keyboardType: TextInputType.emailAddress,
                     obsureText: false),
@@ -36,7 +37,7 @@ class SignUpScreen extends StatelessWidget {
                   height: size.width / 16,
                 ),
                 TextFieldsEmailLogin(
-                    label: 'Password',
+                    label: AppLocalizations.of(context)!.password,
                     controller: _passwordController,
                     keyboardType: TextInputType.text,
                     obsureText: true),
@@ -57,8 +58,8 @@ class SignUpScreen extends StatelessWidget {
                             _passwordController.text.trim(), context);
                       }
                     },
-                    child: const Text(
-                      'Sign Up',
+                    child:  Text(
+                      AppLocalizations.of(context)!.singup,
                       style: TextStyle(fontSize: 16),
                     )),
                 // SizedBox(height: size.width/18,),
@@ -66,9 +67,9 @@ class SignUpScreen extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text(
-                      "Already have an account?",
-                      style: TextStyle(fontSize: 18),
+                     Text(
+                      AppLocalizations.of(context)!.alreadyHaveAnAcc,
+                      style: TextStyle(fontSize: 16),
                     ),
                     TextButton(
                         onPressed: () {
@@ -78,8 +79,8 @@ class SignUpScreen extends StatelessWidget {
                               ),
                               (route) => false);
                         },
-                        child: const Text(
-                          'Login',
+                        child:  Text(
+                          AppLocalizations.of(context)!.login,
                           style: TextStyle(fontSize: 18),
                         ))
                   ],
