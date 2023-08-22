@@ -1,16 +1,52 @@
 import 'package:flutter/material.dart';
+import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:splitwise_app/functions/participants_function.dart';
 import 'package:splitwise_app/model/group%20model/group_model.dart';
 import 'package:splitwise_app/model/participant_model.dart';
 import 'package:splitwise_app/screens/edit_details_screen.dart';
 import 'package:splitwise_app/screens/homescreen/home_screen.dart';
 
-class ExpenseScreen extends StatelessWidget {
-  const ExpenseScreen({
+class ExpenseScreen extends StatefulWidget {
+  ExpenseScreen({
     super.key,
     required this.group,
   });
   final Group group;
+
+  @override
+  State<ExpenseScreen> createState() => _ExpenseScreenState();
+}
+
+class _ExpenseScreenState extends State<ExpenseScreen> {
+  var _razorpay = Razorpay();
+  @override
+  void initState() {
+    // TODO: implement initState
+    _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+    _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
+    _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+    super.initState();
+  }
+
+  void _handlePaymentSuccess(PaymentSuccessResponse response) {
+    // Do something when payment succeeds
+    print("PaymentSuccsess");
+  }
+
+  void _handlePaymentError(PaymentFailureResponse response) {
+    // Do something when payment fails
+    print("PaymentFailed");
+  }
+
+  void _handleExternalWallet(ExternalWalletResponse response) {
+    // Do something when an external wallet was selected
+  }
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _razorpay.clear();
+    super.dispose();
+  }
 
   // final int index;
   @override
@@ -19,14 +55,20 @@ class ExpenseScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(group.groupName),
+        title: Text(widget.group.groupName),
         centerTitle: true,
-        leading: IconButton(onPressed: () {
-          Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => const HomeScreen(),), (route) => false);
-        }, icon: const Icon(Icons.home)),
+        leading: IconButton(
+            onPressed: () {
+              Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(
+                    builder: (context) => const HomeScreen(),
+                  ),
+                  (route) => false);
+            },
+            icon: const Icon(Icons.home)),
       ),
       body: FutureBuilder<List<Participants>>(
-        future: fetchParticipantsFromFirebase(group.groupName),
+        future: fetchParticipantsFromFirebase(widget.group.groupName),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
@@ -51,7 +93,7 @@ class ExpenseScreen extends StatelessWidget {
                             fontSize: 16, fontWeight: FontWeight.bold),
                       ),
                       // Spacer(),
-                      Text('₹${group.amount}',
+                      Text('₹${widget.group.amount}',
                           style: const TextStyle(
                               fontSize: 16, fontWeight: FontWeight.bold)),
                     ],
@@ -64,23 +106,41 @@ class ExpenseScreen extends StatelessWidget {
                       children: [
                         Column(
                           children: [
-                            SplitAmounts(
-                                size: size,
-                                amount: group.amountPersonOne.toString(),
-                                index: 1),
+                            GestureDetector(
+                              onTap: () {
+                                var options = {
+                                  'key': 'rzp_test_TVuRoan6e8ILQX',
+                                  'amount': widget.group.amountPersonOne *100,
+                                  'name': 'Person 1',
+                                  'description': 'Fine T-Shirt',
+                                  'timeout': 300,
+                                  'prefill': {
+                                    'contact': '8888888888',
+                                    'email': 'test@razorpay.com'
+                                  }
+                                };
+                                _razorpay.open(options);
+                              },
+                              child: SplitAmounts(
+                                  size: size,
+                                  amount:
+                                      widget.group.amountPersonOne.toString(),
+                                  index: 1),
+                            ),
                             SizedBox(
                               height: size.width * .03,
                             ),
                             SplitAmounts(
                                 size: size,
-                                amount: group.amountPersonTwo.toString(),
+                                amount: widget.group.amountPersonTwo.toString(),
                                 index: 2),
                             SizedBox(
                               height: size.width * .03,
                             ),
                             SplitAmounts(
                                 size: size,
-                                amount: group.amountPersonThree.toString(),
+                                amount:
+                                    widget.group.amountPersonThree.toString(),
                                 index: 3),
                           ],
                         )
@@ -111,7 +171,7 @@ class ExpenseScreen extends StatelessWidget {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => EditDetailsScreen(group: group),
+            builder: (context) => EditDetailsScreen(group: widget.group),
           ));
         },
         label: const Text('Edit details'),
