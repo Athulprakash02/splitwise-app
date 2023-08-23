@@ -6,7 +6,7 @@ import 'package:splitwise_app/functions/avatar_pick_function.dart';
 import 'package:splitwise_app/functions/group_functions.dart';
 import 'package:splitwise_app/functions/participants_function.dart';
 import 'package:splitwise_app/model/group%20model/group_model.dart';
-import 'package:splitwise_app/model/participant_model.dart';
+import 'package:splitwise_app/model/participant%20model/participant_model.dart';
 import 'package:splitwise_app/screens/homescreen/home_screen.dart';
 import 'package:splitwise_app/screens/widgets/show_snackbar.dart';
 

@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:splitwise_app/model/participant_model.dart';
+import 'package:splitwise_app/model/participant%20model/participant_model.dart';
 
 FirebaseFirestore firestore = FirebaseFirestore.instance;
 Future<void> createParticipant(Participants participant) async {
