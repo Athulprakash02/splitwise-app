@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:splitwise_app/controllers/locale_provider.dart';
 import 'package:splitwise_app/functions/auth.dart';
-import 'package:splitwise_app/screens/login_with_otp.dart';
-import 'package:splitwise_app/screens/signup_screen.dart';
+import 'package:splitwise_app/screens/auth/login/login_with_otp.dart';
+import 'package:splitwise_app/screens/auth/signup/signup_screen.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import 'widgets/textfeilds_email_login.dart';
+import '../../widgets/textfeilds_email_login.dart';
 
 class LoginScreen extends StatelessWidget {
   LoginScreen({super.key});

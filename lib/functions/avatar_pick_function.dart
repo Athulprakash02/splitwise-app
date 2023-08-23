@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:splitwise_app/screens/split_expense_screen.dart';
+import 'package:splitwise_app/screens/expenses/split_expense_screen.dart';
 
 Future<String> addAvatar(XFile imagePicked) async {
   Reference referenceRoot = FirebaseStorage.instance.ref();

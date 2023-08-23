@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:splitwise_app/functions/auth.dart';
-import 'package:splitwise_app/screens/otp_screen.dart';
+import 'package:splitwise_app/screens/auth/login/otp_screen.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'widgets/login_textfeild.dart';
+import '../../widgets/login_textfeild.dart';
 
 class LoginWithOtpScreen extends StatelessWidget {
   LoginWithOtpScreen({super.key});

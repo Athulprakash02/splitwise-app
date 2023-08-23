@@ -5,10 +5,10 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:splitwise_app/functions/group_functions.dart';
 import 'package:splitwise_app/main.dart';
 import 'package:splitwise_app/model/group%20model/group_model.dart';
-import 'package:splitwise_app/screens/expense_screen.dart';
-import 'package:splitwise_app/screens/login_screen.dart';
+import 'package:splitwise_app/screens/expenses/expense_screen.dart';
+import 'package:splitwise_app/screens/auth/login/login_screen.dart';
 import 'package:splitwise_app/screens/speech_to_text.dart';
-import 'package:splitwise_app/screens/split_expense_screen.dart';
+import 'package:splitwise_app/screens/expenses/split_expense_screen.dart';
 import 'package:splitwise_app/screens/widgets/show_snackbar.dart';
 
 class HomeScreen extends StatefulWidget {

@@ -7,10 +7,10 @@ import 'package:splitwise_app/functions/group_functions.dart';
 import 'package:splitwise_app/functions/participants_function.dart';
 import 'package:splitwise_app/model/group%20model/group_model.dart';
 import 'package:splitwise_app/model/participant_model.dart';
-import 'package:splitwise_app/screens/split_expense_screen.dart';
+import 'package:splitwise_app/screens/expenses/split_expense_screen.dart';
 import 'package:splitwise_app/screens/homescreen/home_screen.dart';
 
-import 'widgets/details_edit_widget.dart';
+import '../widgets/details_edit_widget.dart';
 
 class EditDetailsScreen extends StatefulWidget {
   const EditDetailsScreen(

@@ -3,7 +3,7 @@ import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:splitwise_app/functions/participants_function.dart';
 import 'package:splitwise_app/model/group%20model/group_model.dart';
 import 'package:splitwise_app/model/participant_model.dart';
-import 'package:splitwise_app/screens/edit_details_screen.dart';
+import 'package:splitwise_app/screens/expenses/edit_expense_screen.dart';
 import 'package:splitwise_app/screens/homescreen/home_screen.dart';
 
 class ExpenseScreen extends StatefulWidget {

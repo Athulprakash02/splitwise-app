@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:splitwise_app/functions/auth.dart';
-import 'package:splitwise_app/screens/login_screen.dart';
+import 'package:splitwise_app/screens/auth/login/login_screen.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import 'widgets/textfeilds_email_login.dart';
+import '../../widgets/textfeilds_email_login.dart';
 
 class SignUpScreen extends StatelessWidget {
   SignUpScreen({super.key});

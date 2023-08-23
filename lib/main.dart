@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:splitwise_app/controllers/locale_provider.dart';
 import 'package:splitwise_app/core/theme.dart';
 import 'package:splitwise_app/l10n/l10n.dart';
-import 'package:splitwise_app/screens/auth_wrapper.dart';
+import 'package:splitwise_app/screens/auth/auth_wrapper.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 AndroidNotificationChannel channel = const AndroidNotificationChannel(

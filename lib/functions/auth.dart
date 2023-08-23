@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:splitwise_app/core/constants.dart';
 import 'package:splitwise_app/screens/homescreen/home_screen.dart';
-import 'package:splitwise_app/screens/login_screen.dart';
+import 'package:splitwise_app/screens/auth/login/login_screen.dart';
 import 'package:splitwise_app/screens/widgets/show_snackbar.dart';
 
 final _auth = FirebaseAuth.instance;
