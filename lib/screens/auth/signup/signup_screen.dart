@@ -9,6 +9,8 @@ class SignUpScreen extends StatelessWidget {
   SignUpScreen({super.key});
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _fullNameController = TextEditingController();
+  final TextEditingController _phoneNumberController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +29,14 @@ class SignUpScreen extends StatelessWidget {
                   'assets/images/signup.png',
                   width: size.width * .5,
                 ),
+                TextFieldsEmailLogin(
+                    label: 'Full name',
+                    controller: _fullNameController,
+                    keyboardType: TextInputType.name,
+                    obsureText: false),
+                SizedBox(
+                  height: size.width / 20,
+                ),
 
                 TextFieldsEmailLogin(
                     label: AppLocalizations.of(context)!.email,
@@ -34,7 +44,15 @@ class SignUpScreen extends StatelessWidget {
                     keyboardType: TextInputType.emailAddress,
                     obsureText: false),
                 SizedBox(
-                  height: size.width / 16,
+                  height: size.width / 20,
+                ),
+                TextFieldsEmailLogin(
+                    label: 'Phone number',
+                    controller: _phoneNumberController,
+                    keyboardType: TextInputType.phone,
+                    obsureText: false),
+                SizedBox(
+                  height: size.width / 20,
                 ),
                 TextFieldsEmailLogin(
                     label: AppLocalizations.of(context)!.password,
@@ -42,23 +60,22 @@ class SignUpScreen extends StatelessWidget {
                     keyboardType: TextInputType.text,
                     obsureText: true),
                 SizedBox(
-                  height: size.width / 16,
+                  height: size.width / 20,
                 ),
                 ElevatedButton(
                     onPressed: () {
                       if (_emailController.text.trim().isNotEmpty &&
                           _passwordController.text.trim().length >= 6) {
-                         signUpWithEmail(
+                        signUpWithEmail(
                             email: _emailController.text.trim(),
                             password: _passwordController.text.trim(),
                             context: context);
-                       
                       } else {
                         validCheck(_emailController.text.trim(),
                             _passwordController.text.trim(), context);
                       }
                     },
-                    child:  Text(
+                    child: Text(
                       AppLocalizations.of(context)!.singup,
                       style: const TextStyle(fontSize: 16),
                     )),
@@ -67,7 +84,7 @@ class SignUpScreen extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                     Text(
+                    Text(
                       AppLocalizations.of(context)!.alreadyHaveAnAcc,
                       style: const TextStyle(fontSize: 16),
                     ),
@@ -79,7 +96,7 @@ class SignUpScreen extends StatelessWidget {
                               ),
                               (route) => false);
                         },
-                        child:  Text(
+                        child: Text(
                           AppLocalizations.of(context)!.login,
                           style: const TextStyle(fontSize: 18),
                         ))
@@ -92,6 +109,4 @@ class SignUpScreen extends StatelessWidget {
       ),
     );
   }
-
- 
 }

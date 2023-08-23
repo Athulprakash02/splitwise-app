@@ -41,7 +41,6 @@ class _EditDetailsScreenState extends State<EditDetailsScreen> {
       splits.add(value);
       _percentageControllers.add(TextEditingController(text: value.toString()));
     }
-    
   }
 
   String? imagePath;
@@ -75,8 +74,7 @@ class _EditDetailsScreenState extends State<EditDetailsScreen> {
               child: imagePath == null
                   ? CircleAvatar(
                       radius: size.width / 10,
-                      backgroundImage:
-                          NetworkImage(widget.group.imageAvatar),
+                      backgroundImage: NetworkImage(widget.group.imageAvatar),
                     )
                   : CircleAvatar(
                       radius: size.width / 10,
@@ -105,7 +103,6 @@ class _EditDetailsScreenState extends State<EditDetailsScreen> {
                       hintText: 'percentage'),
                   itemCount: widget.users.length),
             )
-            
           ],
         ),
       ),
@@ -115,17 +112,16 @@ class _EditDetailsScreenState extends State<EditDetailsScreen> {
               ? widget.group.imageAvatar
               : await addAvatar(imagePicked!);
           await delete(widget.group.imageAvatar);
-          double percentage =0;
+          double percentage = 0;
           List<double> sharedAmounts = [];
-          for(int i = 0;i<widget.users.length;i++){
+          for (int i = 0; i < widget.users.length; i++) {
             // ignore: no_leading_underscores_for_local_identifiers
             double _percentage = double.parse(_percentageControllers[i].text);
             double sharedAmount = (widget.group.amount * _percentage) / 100;
-        sharedAmounts.add(sharedAmount);
-            percentage = percentage+ _percentage;
-
+            sharedAmounts.add(sharedAmount);
+            percentage = percentage + _percentage;
           }
-      updateDataInFirestore(sharedAmounts, widget.group.groupName);
+          updateDataInFirestore(sharedAmounts, widget.group.groupName);
           if (percentage == 100) {
             Group updated = Group(
               amount: double.parse(_amountController.text),
@@ -133,7 +129,6 @@ class _EditDetailsScreenState extends State<EditDetailsScreen> {
               imageAvatar: imageUrl ?? widget.group.imageAvatar,
               path: path ?? widget.group.path,
               groupName: _groupNameController.text.trim(),
-           
             );
             await updateDate(updated, widget.group.groupName);
             // ignore: use_build_context_synchronously
@@ -149,6 +144,4 @@ class _EditDetailsScreenState extends State<EditDetailsScreen> {
       ),
     );
   }
-
-  
 }
