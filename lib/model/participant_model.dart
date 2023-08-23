@@ -16,7 +16,7 @@ class Participants {
     return {
       
       "group name": groupName,
-      "partcipant names": participantName,
+      "partcipant name": participantName,
       "amount" : amount
 
     };

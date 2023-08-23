@@ -4,9 +4,9 @@ class Group {
   final double amount;
   final String imageAvatar;
   final String path;
-  final double amountPersonOne;
-  final double amountPersonTwo;
-  final double amountPersonThree;
+  // final double amountPersonOne;
+  // final double amountPersonTwo;
+  // final double amountPersonThree;
 
   Group({
     required this.amount,
@@ -14,9 +14,9 @@ class Group {
     required this.imageAvatar,
     required this.path,
     required this.groupName,
-    required this.amountPersonOne,
-    required this.amountPersonTwo,
-    required this.amountPersonThree,
+    // required this.amountPersonOne,
+    // required this.amountPersonTwo,
+    // required this.amountPersonThree,
   });
 
   toJson() {
@@ -26,9 +26,9 @@ class Group {
       "amount": amount,
       "image path": path,
       "image avatar url": imageAvatar,
-      "person one amount": amountPersonOne,
-      "person two amount": amountPersonTwo,
-      "person three amount": amountPersonThree,
+      // "person one amount": amountPersonOne,
+      // "person two amount": amountPersonTwo,
+      // "person three amount": amountPersonThree,
     };
   }
 }

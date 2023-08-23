@@ -17,32 +17,28 @@ Future<void> createGroup(Group groupname) async {
   await firestore.collection('groups').add(groupname.toJson());
 }
 
-Future<List<Group>> fetchGroupsFromFirebase() async{
+Future<List<Group>> fetchGroupsFromFirebase() async {
   List<Group> groups = [];
 
   try {
     QuerySnapshot groupSnapshot = await firestore.collection('groups').get();
-    for(var groupDoc in groupSnapshot.docs){
+    for (var groupDoc in groupSnapshot.docs) {
       Group group = Group(
-            id: groupDoc.id,
-            groupName: groupDoc["group name"],
-            imageAvatar: groupDoc["image avatar url"],
-            path: groupDoc["image path"],
-            amount: groupDoc["amount"],
-            amountPersonOne: groupDoc["person one amount"],
-            amountPersonTwo: groupDoc["person two amount"],
-            amountPersonThree: groupDoc["person three amount"]);
+        id: groupDoc.id,
+        groupName: groupDoc["group name"],
+        imageAvatar: groupDoc["image avatar url"],
+        path: groupDoc["image path"],
+        amount: groupDoc["amount"],
+        // amountPersonOne: groupDoc["person one amount"],
+        // amountPersonTwo: groupDoc["person two amount"],
+        // amountPersonThree: groupDoc["person three amount"],
+      );
       groups.add(group);
-
     }
 
-  // ignore: empty_catches, unused_catch_clause
-  }on FirebaseException catch (e) {
-    
+    // ignore: empty_catches, unused_catch_clause
+  } on FirebaseException catch (e) {}
 
-  }
-  
- 
   return groups;
 }
 // Stream<List<Group>> fetchGroupsFromFirebaseStream() {

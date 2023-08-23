@@ -47,6 +47,7 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
     _razorpay.clear();
     super.dispose();
   }
+  List<Participants>? users = [];
 
   // final int index;
   @override
@@ -67,8 +68,8 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
             },
             icon: const Icon(Icons.home)),
       ),
-      body: FutureBuilder<List<Participants>>(
-        future: fetchParticipantsFromFirebase(widget.group.groupName),
+      body: StreamBuilder<List<Participants>>(
+        stream: streamParticipantsFromFirebase(widget.group.groupName),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
@@ -79,7 +80,7 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
               child: Text('No users'),
             );
           } else {
-            // List<Participants>? users = snapshot.data;
+             users = snapshot.data;
             return Padding(
               padding: EdgeInsets.all(size.width / 16),
               child: Column(
@@ -102,49 +103,59 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
                     height: size.width * .03,
                   ),
                   Expanded(
-                    child: ListView(
-                      children: [
-                        Column(
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                var options = {
-                                  'key': 'rzp_test_TVuRoan6e8ILQX',
-                                  'amount': widget.group.amountPersonOne *100,
-                                  'name': 'Person 1',
-                                  'description': 'Fine T-Shirt',
-                                  'timeout': 300,
-                                  'prefill': {
-                                    'contact': '8888888888',
-                                    'email': 'test@razorpay.com'
-                                  }
-                                };
-                                _razorpay.open(options);
-                              },
-                              child: SplitAmounts(
-                                  size: size,
-                                  amount:
-                                      widget.group.amountPersonOne.toString(),
-                                  index: 1),
-                            ),
-                            SizedBox(
-                              height: size.width * .03,
-                            ),
-                            SplitAmounts(
-                                size: size,
-                                amount: widget.group.amountPersonTwo.toString(),
-                                index: 2),
-                            SizedBox(
-                              height: size.width * .03,
-                            ),
-                            SplitAmounts(
-                                size: size,
-                                amount:
-                                    widget.group.amountPersonThree.toString(),
-                                index: 3),
-                          ],
-                        )
-                      ],
+                    child: ListView.separated(
+                      itemBuilder: (context, index) {
+                        return SplitAmounts(
+                            size: size,
+                            name: users![index].participantName,
+                            amount: users![index].amount.toString(),
+                            index: index);
+                      },
+                      separatorBuilder: (context, index) => Divider(),
+                      itemCount: snapshot.data!.length,
+                      // children: [
+                      //
+                      // Column(
+                      //   children: [
+                      // GestureDetector(
+                      //   onTap: () {
+                      //     var options = {
+                      //       'key': 'rzp_test_TVuRoan6e8ILQX',
+                      //       'amount': 5*100,
+                      //       'name': 'Person 1',
+                      //       'description': 'Fine T-Shirt',
+                      //       'timeout': 300,
+                      //       'prefill': {
+                      //         'contact': '8888888888',
+                      //         'email': 'test@razorpay.com'
+                      //       }
+                      //     };
+                      //     _razorpay.open(options);
+                      //   },
+                      //   child: SplitAmounts(
+                      //       size: size,
+                      //       amount:
+                      //           widget.group.amountPersonOne.toString(),
+                      //       index: 1),
+                      // ),
+                      // SizedBox(
+                      //   height: size.width * .03,
+                      // ),
+                      // SplitAmounts(
+                      //     size: size,
+                      //     amount: widget.group.amountPersonTwo.toString(),
+                      //     index: 2),
+                      // SizedBox(
+                      //   height: size.width * .03,
+                      // ),
+                      // SplitAmounts(
+                      //     size: size,
+                      //     amount:
+                      //         widget.group.amountPersonThree.toString(),
+                      //     index: 3),
+                      // ],
+                      //   )
+                      // ],
                     ),
                     // child: ListView.separated(
                     //     physics: const BouncingScrollPhysics(),
@@ -171,7 +182,7 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => EditDetailsScreen(group: widget.group),
+            builder: (context) => EditDetailsScreen(group: widget.group,users: users!),
           ));
         },
         label: const Text('Edit details'),
@@ -250,13 +261,14 @@ class SplitAmounts extends StatelessWidget {
     super.key,
     required this.size,
     required this.amount,
-    required this.index,
+    required this.index, required this.name,
   });
 
   final Size size;
   // final List<double> persons;
   final String amount;
   final int index;
+  final String name;
 
   @override
   Widget build(BuildContext context) {
@@ -278,7 +290,7 @@ class SplitAmounts extends StatelessWidget {
       child: Center(
           child: ListTile(
               title: Text(
-                "person $index",
+                name,
                 style: const TextStyle(fontSize: 20),
               ),
               trailing: Text(
