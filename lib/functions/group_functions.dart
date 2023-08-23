@@ -41,6 +41,35 @@ Future<List<Group>> fetchGroupsFromFirebase() async {
 
   return groups;
 }
+
+Future<void> updateDate(Group updatedGroup, String groupName) async {
+   
+    try {
+      CollectionReference collectionRef =
+          FirebaseFirestore.instance.collection('groups');
+
+      QuerySnapshot querrySnapshot =
+          await collectionRef.where('group name', isEqualTo: groupName).get();
+      for (QueryDocumentSnapshot docSnapshot in querrySnapshot.docs) {
+        // Define the fields you want to update
+        Map<String, dynamic> updatedData = {
+          "group name": updatedGroup.groupName,
+          "amount": updatedGroup.amount,
+          "image path": updatedGroup.path,
+          // "person one amount": amountOne,
+          "image avatar url": updatedGroup.imageAvatar,
+
+          // "person two amount": amountTwo,
+          // "person three amount": amountThree,
+          // Add other fields you want to update
+        };
+
+        // double.parse(_amountPersonThreeController.text);
+        await docSnapshot.reference.update(updatedData);
+      }
+      // ignore: empty_catches
+    } catch (e) {}
+  }
 // Stream<List<Group>> fetchGroupsFromFirebaseStream() {
 //   print('object');
 //   return FirebaseFirestore.instance.collection('groups').snapshots().map(

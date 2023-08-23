@@ -1,10 +1,11 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:splitwise_app/model/participant_model.dart';
 
 FirebaseFirestore firestore = FirebaseFirestore.instance;
 Future<void> createParticipant(Participants participant) async {
   await firestore.collection('participants').add(participant.toJson());
-  print('added');
 }
 
 // Future<List<Participants>> fetchParticipantsFromFirebase(
@@ -40,8 +41,8 @@ Stream<List<Participants>>? streamParticipantsFromFirebase(String groupName) {
             );
           }).toList());
   }on FirebaseException catch (e) {
+    log(e.message as num);
     
-    print(e.message);
     return null;
     
   }

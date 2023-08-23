@@ -27,24 +27,6 @@ class _SplitExpenseScreenState extends State<SplitExpenseScreen> {
   final TextEditingController _amountController = TextEditingController();
   final List<TextEditingController> _percentageControllers = [];
   final TextEditingController _personNameController = TextEditingController();
-  // final list = participantNotifier.value.toList();
-  @override
-  void initState() {
-    super.initState();
-
-    // print(list.length);
-    // for (var i = 0; i < 3; i++) {
-    //   _percentageControllers.add(TextEditingController());
-    // }
-  }
-
-  @override
-  void dispose() {
-    // for (var controller in _percentageControllers) {
-    //   controller.dispose();
-    // }
-    super.dispose();
-  }
 
   String? imagePath;
   String? imageUrl;
@@ -118,7 +100,7 @@ class _SplitExpenseScreenState extends State<SplitExpenseScreen> {
                   },
                 );
               },
-              icon: Icon(
+              icon: const Icon(
                 Icons.add,
                 size: 32,
               ))
@@ -162,8 +144,7 @@ class _SplitExpenseScreenState extends State<SplitExpenseScreen> {
                     child: CircularProgressIndicator(),
                   );
                 } else if (snapshot.hasError) {
-                  print(snapshot.error);
-                  return Text('no participants');
+                  return const Text('no participants');
                 } else {
                   List<Participants>? participantNames = snapshot.data;
                   return Padding(
@@ -234,18 +215,12 @@ class _SplitExpenseScreenState extends State<SplitExpenseScreen> {
               imageUrl = await addAvatar(imagePicked!);
               num total = splitExpense();
               if (total == 100) {
-                // for (int i = 0; i < _percentageControllers.length; i++) {}
                 // ignore: use_build_context_synchronously
                 Navigator.of(context).pushAndRemoveUntil(
                     MaterialPageRoute(
                       builder: (context) => const HomeScreen(),
                     ),
                     (route) => false);
-                // Navigator.of(context).pushReplacement(MaterialPageRoute(
-                //   builder: (context) => ExpenseScreen(
-
-                //   )
-                // ));
               } else {
                 // ignore: use_build_context_synchronously
                 showSnackBar(
@@ -277,19 +252,8 @@ class _SplitExpenseScreenState extends State<SplitExpenseScreen> {
             double.tryParse(_percentageControllers[i].text) ?? 0;
         double sharedAmount = (totalAmount * percentage) / 100;
         sharedAmounts.add(sharedAmount);
-          print('hai');
-        print(totalAmount);
-        print(_percentageControllers.length);
-        print(_percentageControllers[i].text);
-        print(sharedAmount);
-        
-
-        // Update the participant's balance with the shared amount.
-        // participantNotifier.value[i].amount += sharedAmount;
       }
       updateDataInFirestore(sharedAmounts, widget.groupName);
-      // updateParticipantBalances(participantNotifier.value);
-     
 
       Group newGroup = Group(
         amount: double.parse(_amountController.text.trim()),
@@ -297,9 +261,6 @@ class _SplitExpenseScreenState extends State<SplitExpenseScreen> {
         imageAvatar: imageUrl!,
         path: path!,
         groupName: widget.groupName,
-        // amountPersonOne: sharedAmounts[0],
-        // amountPersonTwo: sharedAmounts[1],
-        // amountPersonThree: sharedAmounts[2],
       );
       createGroup(newGroup);
 
@@ -315,12 +276,4 @@ class _SplitExpenseScreenState extends State<SplitExpenseScreen> {
     }
     return 0;
   }
-
-  // Future<void> updateParticipantBalances(
-  //     List<ParticipantModel> participants) async {
-  //   // final participantBox = await Hive.openBox<ParticipantModel>('participants');
-  //   // for (int i = 0; i < participants.length; i++) {
-  //   //   await participantBox.putAt(i, participants[i]);
-  //   // }
-  // }
 }

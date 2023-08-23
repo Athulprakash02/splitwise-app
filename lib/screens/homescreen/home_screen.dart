@@ -218,14 +218,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           showSnackBar(
                               context, Colors.red, "Group name can't be empty");
                         } else {
-                          // final _group = Group(
-                          //     id: '',
-                          //     groupName: _groupNameController.text.trim(),
-                          //     amount: double.parse(_amountController.text));
-                          // await createGroup(_group);
-                          //  await groupProvider.createGroup(_group);
-                          // onCreateGroupClicked(
-                          //     _groupNameController.text.trim(), context);
+                        
                           Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => SplitExpenseScreen(
                                 groupName: _groupNameController.text.trim()),

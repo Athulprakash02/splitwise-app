@@ -1,9 +1,9 @@
 import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:splitwise_app/functions/avatar_pick_function.dart';
+import 'package:splitwise_app/functions/group_functions.dart';
 import 'package:splitwise_app/functions/participants_function.dart';
 import 'package:splitwise_app/model/group%20model/group_model.dart';
 import 'package:splitwise_app/model/participant_model.dart';
@@ -39,7 +39,6 @@ class _EditDetailsScreenState extends State<EditDetailsScreen> {
     for (int i = 0; i < widget.users.length; i++) {
       double value = widget.users[i].amount / widget.group.amount * 100;
       splits.add(value);
-      print(value);
       _percentageControllers.add(TextEditingController(text: value.toString()));
     }
     
@@ -119,6 +118,7 @@ class _EditDetailsScreenState extends State<EditDetailsScreen> {
           double percentage =0;
           List<double> sharedAmounts = [];
           for(int i = 0;i<widget.users.length;i++){
+            // ignore: no_leading_underscores_for_local_identifiers
             double _percentage = double.parse(_percentageControllers[i].text);
             double sharedAmount = (widget.group.amount * _percentage) / 100;
         sharedAmounts.add(sharedAmount);
@@ -133,10 +133,7 @@ class _EditDetailsScreenState extends State<EditDetailsScreen> {
               imageAvatar: imageUrl ?? widget.group.imageAvatar,
               path: path ?? widget.group.path,
               groupName: _groupNameController.text.trim(),
-              // amountPersonOne: double.parse(_amountPersonOneController.text),
-              // amountPersonTwo: double.parse(_amountPersonTwoController.text),
-              // amountPersonThree:
-              //     double.parse(_amountPersonThreeController.text)
+           
             );
             await updateDate(updated, widget.group.groupName);
             // ignore: use_build_context_synchronously
@@ -153,37 +150,5 @@ class _EditDetailsScreenState extends State<EditDetailsScreen> {
     );
   }
 
-  Future<void> updateDate(Group updatedGroup, String groupName) async {
-    // double amountOne =
-    //     (updatedGroup.amountPersonOne / 100) * updatedGroup.amount;
-    // double amountTwo =
-    //     (updatedGroup.amountPersonTwo / 100) * updatedGroup.amount;
-    // double amountThree =
-    //     (updatedGroup.amountPersonThree / 100) * updatedGroup.amount;
-    try {
-      CollectionReference collectionRef =
-          FirebaseFirestore.instance.collection('groups');
-
-      QuerySnapshot querrySnapshot =
-          await collectionRef.where('group name', isEqualTo: groupName).get();
-      for (QueryDocumentSnapshot docSnapshot in querrySnapshot.docs) {
-        // Define the fields you want to update
-        Map<String, dynamic> updatedData = {
-          "group name": updatedGroup.groupName,
-          "amount": updatedGroup.amount,
-          "image path": updatedGroup.path,
-          // "person one amount": amountOne,
-          "image avatar url": updatedGroup.imageAvatar,
-
-          // "person two amount": amountTwo,
-          // "person three amount": amountThree,
-          // Add other fields you want to update
-        };
-
-        // double.parse(_amountPersonThreeController.text);
-        await docSnapshot.reference.update(updatedData);
-      }
-      // ignore: empty_catches
-    } catch (e) {}
-  }
+  
 }
