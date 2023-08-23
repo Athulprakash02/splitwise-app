@@ -101,17 +101,90 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
                   Expanded(
                     child: ListView.separated(
                       itemBuilder: (context, index) {
-                        return SplitAmounts(
-                            size: size,
-                            name: users![index].participantName,
-                            amount: users![index].amount.toString(),
-                            index: index);
+                        return GestureDetector(
+                          onTap: () {
+                            var options = {
+                            'key': 'rzp_test_TVuRoan6e8ILQX',
+                            'amount': users![index].amount*100,
+                            'name': 'Person 1',
+                            'description': 'Fine T-Shirt',
+                            'timeout': 300,
+                            'prefill': {
+                              'contact': '8888888888',
+                              'email': 'test@razorpay.com'
+                            }
+                          };
+                          _razorpay.open(options);
+                        
+                          },
+                          child: SplitAmounts(
+                              size: size,
+                              name: users![index].participantName,
+                              amount: users![index].amount.toString(),
+                              index: index),
+                        );
                       },
                       separatorBuilder: (context, index) => const Divider(),
                       itemCount: snapshot.data!.length,
-                     
+                      // children: [
+                      //
+                      // Column(
+                      //   children: [
+                      // GestureDetector(
+                      //   onTap: () {
+                      //     var options = {
+                      //       'key': 'rzp_test_TVuRoan6e8ILQX',
+                      //       'amount': 5*100,
+                      //       'name': 'Person 1',
+                      //       'description': 'Fine T-Shirt',
+                      //       'timeout': 300,
+                      //       'prefill': {
+                      //         'contact': '8888888888',
+                      //         'email': 'test@razorpay.com'
+                      //       }
+                      //     };
+                      //     _razorpay.open(options);
+                      //   },
+                      //   child: SplitAmounts(
+                      //       size: size,
+                      //       amount:
+                      //           widget.group.amountPersonOne.toString(),
+                      //       index: 1),
+                      // ),
+                      // SizedBox(
+                      //   height: size.width * .03,
+                      // ),
+                      // SplitAmounts(
+                      //     size: size,
+                      //     amount: widget.group.amountPersonTwo.toString(),
+                      //     index: 2),
+                      // SizedBox(
+                      //   height: size.width * .03,
+                      // ),
+                      // SplitAmounts(
+                      //     size: size,
+                      //     amount:
+                      //         widget.group.amountPersonThree.toString(),
+                      //     index: 3),
+                      // ],
+                      //   )
+                      // ],
                     ),
-                   
+                    // child: ListView.separated(
+                    //     physics: const BouncingScrollPhysics(),
+                    //     itemBuilder: (context, index) {
+                    //       double value = group.amount / 3;
+                    //       String balanceAmount = value.toStringAsFixed(2);
+                    //       // final user = snapshot.data![index];
+                    //       // list.add(user);
+                    //       return SplitAmounts(
+                    //           size: size,
+
+                    //           amount: persons[index].toString(),
+                    //           index: index + 1);
+                    //     },
+                    //     separatorBuilder: (context, index) => const Divider(),
+                    //     itemCount: 3),
                   ),
                 ],
               ),
@@ -128,7 +201,70 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
         label: const Text('Edit details'),
         icon: const Icon(Icons.edit),
       ),
-     
+      // persistentFooterButtons: [
+      //   ElevatedButton.icon(
+      //       onPressed: () {
+      //         showDialog(
+      //           context: context,
+      //           builder: (ctx) {
+      //             return AlertDialog(
+      //               shape: RoundedRectangleBorder(
+      //                   borderRadius: BorderRadius.circular(15)),
+      //               title: const Text('Add participant'),
+      //               content: TextField(
+      //                 controller: _participantNameController,
+      //                 decoration: InputDecoration(
+      //                     hintText: 'Participant name',
+      //                     border: OutlineInputBorder(
+      //                         borderRadius: BorderRadius.circular(20))),
+      //               ),
+      //               actions: [
+      //                 TextButton(
+      //                     onPressed: () {
+      //                       Navigator.of(ctx).pop();
+      //                     },
+      //                     child: const Text('Cancel',
+      //                         style: TextStyle(fontSize: 16))),
+      //                 TextButton(
+      //                     onPressed: () async {
+      //                       if (_participantNameController.text.isEmpty) {
+      //                         showSnackBar(context, Colors.red,
+      //                             "Participant name can't be empty");
+      //                       } else {
+      //                         final _participant = Participants(
+      //                             groupName: group.groupName,
+      //                             participantName:
+      //                                 _participantNameController.text.trim(),
+      //                             amount: 0);
+
+      //                         await createParticipant(group.groupName, _participant);
+      //                         // onAddParticipantClicked(
+      //                         //     _participantNameController.text.trim(),
+      //                         //     context);
+      //                         Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => ExpenseScreen(group: group),));
+      //                         _participantNameController.clear();
+      //                       }
+      //                     },
+      //                     child:
+      //                         const Text('Add', style: TextStyle(fontSize: 16)))
+      //               ],
+      //             );
+      //           },
+      //         );
+      //       },
+      //       icon: const Icon(Icons.add),
+      //       label: const Text('Add participants')),
+      //   ElevatedButton.icon(
+      //       onPressed: () {
+      //         Navigator.of(context).push(MaterialPageRoute(
+      //           builder: (context) => const SplitExpenseScreen(),
+      //         ));
+
+      //         // if(users)
+      //       },
+      //       icon: const Icon(Icons.attach_money_sharp),
+      //       label: const Text('Split expense')),
+      // ],
     );
   }
 }
