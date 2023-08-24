@@ -84,7 +84,7 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
                             hintText: 'Participant name',
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(20))),
-                      ),
+                      ), 
                       actions: [
                         TextButton(
                             onPressed: () {
