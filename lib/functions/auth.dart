@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:splitwise_app/core/constants.dart';
 import 'package:splitwise_app/functions/group_functions.dart';
 import 'package:splitwise_app/model/user%20model/user_model.dart';
@@ -73,7 +74,7 @@ Future<void> loginWithEmailAndPassword(
     await _auth
         .signInWithEmailAndPassword(email: email, password: password)
         .then((value) {
-    //  await fetchCurrentUser();
+      //  await fetchCurrentUser();
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
             builder: (context) => const HomeScreen(),
@@ -111,17 +112,44 @@ Future<void> cerateUser(UserModel user) async {
 //   userType = type;
 //   print(userType);
 // }
-Future<DocumentSnapshot<Map<String,dynamic>>?> getUserTypeByEmail (String email) async{
-
+Future<DocumentSnapshot<Map<String, dynamic>>?> getUserTypeByEmail(
+    String email) async {
   final userColection = FirebaseFirestore.instance.collection('Users');
-  final querySnapShot = await userColection.where('email',isEqualTo: email).limit(1).get();
-  if(querySnapShot.docs.isNotEmpty){
+  final querySnapShot =
+      await userColection.where('email', isEqualTo: email).limit(1).get();
+  if (querySnapShot.docs.isNotEmpty) {
     return querySnapShot.docs.first;
-  }else{
+  } else {
     return null;
   }
+}
 
-  
+final googleSignIn = GoogleSignIn();
 
+GoogleSignInAccount? _user;
+GoogleSignInAccount get user => _user!;
 
+Future googleLogin(BuildContext context) async {
+  final googleUser = await googleSignIn.signIn();
+  if (googleUser == null) {
+    return;
+  }
+  _user = googleUser;
+
+  final googleAuth = await googleUser.authentication;
+
+  final credential = GoogleAuthProvider.credential(
+    accessToken: googleAuth.accessToken,
+    idToken: googleAuth.idToken,
+  );
+  try {
+    await FirebaseAuth.instance.signInWithCredential(credential).then((value) {
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(
+            builder: (context) => const HomeScreen(),
+          ),
+          (route) => false);
+    });
+    // ignore: empty_catches
+  } catch (e) {}
 }
