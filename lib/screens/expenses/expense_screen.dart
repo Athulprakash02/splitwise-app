@@ -202,10 +202,16 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
           }else if(snapshot.hasError){
             return const SizedBox();
           }else{
-           final userData = snapshot.data!.data() as Map<String, dynamic>;
-           print(userData['User type']);
+           final Map<String, dynamic>? userData = snapshot.data?.data() as Map<String, dynamic>?;
+            if(userData == null){
+              
+              userType = 'Super Admin';
+            }else{
+              userType = userData['User type'];
+            }
+           print(userType);
             return Visibility(
-          visible: userData['User type'] != 'User',
+          visible: userType!= 'User',
           child: FloatingActionButton.extended(
             onPressed: () {
               Navigator.of(context).push(MaterialPageRoute(

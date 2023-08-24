@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:splitwise_app/core/constants.dart';
 import 'package:splitwise_app/functions/group_functions.dart';
@@ -12,7 +13,7 @@ import 'package:splitwise_app/screens/widgets/show_snackbar.dart';
 final _auth = FirebaseAuth.instance;
 String verifyId = '';
 String countryCode = '+91';
-String userType = '';
+// String userType = '';
 
 User? get currentUser => _auth.currentUser;
 Stream<User?> get authState => _auth.authStateChanges();
@@ -152,4 +153,27 @@ Future googleLogin(BuildContext context) async {
     });
     // ignore: empty_catches
   } catch (e) {}
+}
+
+
+Future<void> signInWithFacebook() async {
+  try {
+    final LoginResult result = await FacebookAuth.instance.login();
+
+    if (result.status == LoginStatus.success) {
+      final AccessToken accessToken = result.accessToken!;
+      final AuthCredential credential = FacebookAuthProvider.credential(accessToken.token);
+      final UserCredential authResult = await FirebaseAuth.instance.signInWithCredential(credential);
+      final User? user = authResult.user;
+
+      if (user != null) {
+        // Successfully logged in with Facebook
+        print("Logged in with Facebook: ${user.displayName}");
+      }
+    } else {
+      print("Facebook login failed");
+    }
+  } catch (e) {
+    print("Error: $e");
+  }
 }

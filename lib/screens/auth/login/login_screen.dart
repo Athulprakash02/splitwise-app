@@ -78,57 +78,58 @@ class LoginScreen extends StatelessWidget {
                       style: const TextStyle(fontSize: 18),
                       maxLines: 1,
                     )),
-                     Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            width: size.width * .38,
-                            height: 1,
-                            decoration: const BoxDecoration(color: Colors.grey),
-                          ),
-                          const Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Text(
-                              'Or',
-                              style: TextStyle(fontSize: 20),
-                            ),
-                          ),
-                          Container(
-                            width: size.width * .38,
-                            height: 1,
-                            decoration: const BoxDecoration(color: Colors.grey),
-                          )
-                        ],
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: size.width * .38,
+                      height: 1,
+                      decoration: const BoxDecoration(color: Colors.grey),
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text(
+                        'Or',
+                        style: TextStyle(fontSize: 20),
                       ),
- Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                             googleLogin(context);
-                            },
-                            child: const CircleAvatar(
-                              radius: 20,
-                              backgroundColor: Colors.transparent,
-                              backgroundImage:
-                                  AssetImage('assets/images/google.png'),
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 40,
-                          ),
-                          GestureDetector(
-                            onTap: () {},
-                            child: const CircleAvatar(
-                              radius: 20,
-                              backgroundColor: Colors.transparent,
-                              backgroundImage: AssetImage(
-                                'assets/images/facebook.png',
-                              ),
-                            ),
-                          ),
-                        ],
+                    ),
+                    Container(
+                      width: size.width * .38,
+                      height: 1,
+                      decoration: const BoxDecoration(color: Colors.grey),
+                    )
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        googleLogin(context);
+                      },
+                      child: const CircleAvatar(
+                        radius: 20,
+                        backgroundColor: Colors.transparent,
+                        backgroundImage: AssetImage('assets/images/google.png'),
                       ),
+                    ),
+                    const SizedBox(
+                      width: 40,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        signInWithFacebook();
+                      },
+                      child: const CircleAvatar(
+                        radius: 20,
+                        backgroundColor: Colors.transparent,
+                        backgroundImage: AssetImage(
+                          'assets/images/facebook.png',
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
                 // SizedBox(height: size.width/20,),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
