@@ -1,6 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:splitwise_app/core/constants.dart';
+import 'package:splitwise_app/functions/group_functions.dart';
+import 'package:splitwise_app/model/user%20model/user_model.dart';
 import 'package:splitwise_app/screens/homescreen/home_screen.dart';
 import 'package:splitwise_app/screens/auth/login/login_screen.dart';
 import 'package:splitwise_app/screens/widgets/show_snackbar.dart';
@@ -8,6 +11,7 @@ import 'package:splitwise_app/screens/widgets/show_snackbar.dart';
 final _auth = FirebaseAuth.instance;
 String verifyId = '';
 String countryCode = '+91';
+String userType = '';
 
 User? get currentUser => _auth.currentUser;
 Stream<User?> get authState => _auth.authStateChanges();
@@ -42,13 +46,14 @@ Future<bool> verifyOTP(String otp) async {
 Future<void> signUpWithEmail(
     {required String email,
     required String password,
-    required BuildContext context}) async {
+    required BuildContext context,
+    required UserModel user}) async {
   try {
     await _auth
         .createUserWithEmailAndPassword(email: email, password: password)
         .then((value) {
-           showSnackBar(
-                            context, Colors.green, 'Registered Succesfully!!');
+      cerateUser(user);
+      showSnackBar(context, Colors.green, 'Registered Succesfully!!');
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
             builder: (context) => LoginScreen(),
@@ -68,6 +73,7 @@ Future<void> loginWithEmailAndPassword(
     await _auth
         .signInWithEmailAndPassword(email: email, password: password)
         .then((value) {
+    //  await fetchCurrentUser();
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
             builder: (context) => const HomeScreen(),
@@ -85,4 +91,37 @@ validCheck(String email, String password, BuildContext ctx) {
   } else if (password.length < 6) {
     showSnackBar(ctx, themeColor, 'Minimum 6 characters required for password');
   }
+}
+
+Future<void> cerateUser(UserModel user) async {
+  await firestore.collection('Users').add(user.toJson());
+}
+
+// Future<void> fetchCurrentUser() async {
+//   print('ivde ethiyee');
+//   print(currentUser!.email);
+//   final userColection = FirebaseFirestore.instance.collection('Users');
+//   final querySnapShot = await userColection
+//       .where('email', isEqualTo: currentUser!.email)
+//       .limit(1)
+//       .get();
+//   final userDocument = querySnapShot.docs.first;
+//   print(userDocument.id);
+//   var type = userDocument['User type'];
+//   userType = type;
+//   print(userType);
+// }
+Future<DocumentSnapshot<Map<String,dynamic>>?> getUserTypeByEmail (String email) async{
+
+  final userColection = FirebaseFirestore.instance.collection('Users');
+  final querySnapShot = await userColection.where('email',isEqualTo: email).limit(1).get();
+  if(querySnapShot.docs.isNotEmpty){
+    return querySnapShot.docs.first;
+  }else{
+    return null;
+  }
+
+  
+
+
 }

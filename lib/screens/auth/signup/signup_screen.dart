@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:splitwise_app/functions/auth.dart';
+import 'package:splitwise_app/model/user%20model/user_model.dart';
 import 'package:splitwise_app/screens/auth/login/login_screen.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -64,12 +65,19 @@ class SignUpScreen extends StatelessWidget {
                 ),
                 ElevatedButton(
                     onPressed: () {
+                      UserModel newUser = UserModel(
+                          fullName: _fullNameController.text.trim(),
+                          email: _emailController.text.trim(),
+                          phoneNumber:
+                              int.parse(_phoneNumberController.text.trim()),
+                          userType: 'User');
                       if (_emailController.text.trim().isNotEmpty &&
                           _passwordController.text.trim().length >= 6) {
                         signUpWithEmail(
                             email: _emailController.text.trim(),
                             password: _passwordController.text.trim(),
-                            context: context);
+                            context: context,
+                            user: newUser);
                       } else {
                         validCheck(_emailController.text.trim(),
                             _passwordController.text.trim(), context);

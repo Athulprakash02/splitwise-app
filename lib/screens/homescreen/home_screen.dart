@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:splitwise_app/functions/auth.dart';
 import 'package:splitwise_app/functions/group_functions.dart';
 import 'package:splitwise_app/main.dart';
 import 'package:splitwise_app/model/group%20model/group_model.dart';
@@ -10,6 +11,8 @@ import 'package:splitwise_app/screens/auth/login/login_screen.dart';
 import 'package:splitwise_app/screens/speech_to_text.dart';
 import 'package:splitwise_app/screens/expenses/split_expense_screen.dart';
 import 'package:splitwise_app/screens/widgets/show_snackbar.dart';
+
+var userType = '';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -20,10 +23,13 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final TextEditingController _groupNameController = TextEditingController();
-
+  bool visibility = false;
   @override
   void initState() {
     super.initState();
+    
+    print('object $userType');
+
     FirebaseMessaging.onMessage.listen(
       (RemoteMessage message) {
         RemoteNotification? notification = message.notification;
@@ -89,6 +95,7 @@ class _HomeScreenState extends State<HomeScreen> {
   // final TextEditingController _amountController = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    // fetchCurrentUser();
     Size size = MediaQuery.sizeOf(context);
     // final groupProvider = Provider.of<GroupProvider>(context,listen: false);
     // fetchAllGroups();
@@ -187,57 +194,74 @@ class _HomeScreenState extends State<HomeScreen> {
           }
         },
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          showDialog(
-            context: context,
-            builder: (ctx) {
-              return AlertDialog(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15)),
-                title: const Text('Create group'),
-                content: TextField(
-                  controller: _groupNameController,
-                  decoration: InputDecoration(
-                      hintText: 'Group name',
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20))),
-                ),
-                actions: [
-                  TextButton(
-                      onPressed: () {
-                        Navigator.of(ctx).pop();
-                      },
-                      child: const Text(
-                        'Cancel',
-                        style: TextStyle(fontSize: 16),
-                      )),
-                  TextButton(
-                      onPressed: () async {
-                        if (_groupNameController.text.isEmpty) {
-                          showSnackBar(
-                              context, Colors.red, "Group name can't be empty");
-                        } else {
-                        
-                          Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => SplitExpenseScreen(
-                                groupName: _groupNameController.text.trim()),
-                          ));
-                          // _groupNameController.clear();
-                        }
-                      },
-                      child:
-                          const Text('Create', style: TextStyle(fontSize: 16)))
-                ],
+      floatingActionButton: FutureBuilder(
+        future: getUserTypeByEmail(FirebaseAuth.instance.currentUser!.email!),
+        builder: (context, snapshot) {
+          if(snapshot.connectionState == ConnectionState.waiting){
+            return const SizedBox();
+          }else if(snapshot.hasError){
+            return const SizedBox();
+          }else{
+           final userData = snapshot.data!.data() as Map<String, dynamic>;
+           print(userData['User type']);
+            return Visibility(
+          visible: userData['User type'] == 'Super Admin',
+          child: FloatingActionButton.extended(
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (ctx) {
+                  return AlertDialog(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15)),
+                    title: const Text('Create group'),
+                    content: TextField(
+                      controller: _groupNameController,
+                      decoration: InputDecoration(
+                          hintText: 'Group name',
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20))),
+                    ),
+                    actions: [
+                      TextButton(
+                          onPressed: () {
+                            Navigator.of(ctx).pop();
+                          },
+                          child: const Text(
+                            'Cancel',
+                            style: TextStyle(fontSize: 16),
+                          )),
+                      TextButton(
+                          onPressed: () async {
+                            if (_groupNameController.text.isEmpty) {
+                              showSnackBar(context, Colors.red,
+                                  "Group name can't be empty");
+                            } else {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => SplitExpenseScreen(
+                                    groupName: _groupNameController.text.trim()),
+                              ));
+                              // _groupNameController.clear();
+                            }
+                          },
+                          child: const Text('Create',
+                              style: TextStyle(fontSize: 16)))
+                    ],
+                  );
+                },
               );
             },
-          );
+            label: const Text(
+              'create group',
+              style: TextStyle(fontSize: 16),
+            ),
+            icon: const Icon(Icons.create),
+          ),
+        );
+          }
+          
         },
-        label: const Text(
-          'create group',
-          style: TextStyle(fontSize: 16),
-        ),
-        icon: const Icon(Icons.create),
+        
       ),
     );
   }

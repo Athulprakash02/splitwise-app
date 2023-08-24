@@ -1,10 +1,14 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
+import 'package:splitwise_app/functions/auth.dart';
 import 'package:splitwise_app/functions/participants_function.dart';
 import 'package:splitwise_app/model/group%20model/group_model.dart';
 import 'package:splitwise_app/model/participant%20model/participant_model.dart';
 import 'package:splitwise_app/screens/expenses/edit_expense_screen.dart';
 import 'package:splitwise_app/screens/homescreen/home_screen.dart';
+
+import '../widgets/show_snackbar.dart';
 
 class ExpenseScreen extends StatefulWidget {
   const ExpenseScreen({
@@ -19,6 +23,7 @@ class ExpenseScreen extends StatefulWidget {
 
 class _ExpenseScreenState extends State<ExpenseScreen> {
   final _razorpay = Razorpay();
+  final TextEditingController _personNameController = TextEditingController();
   @override
   void initState() {
     _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
@@ -64,6 +69,57 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
                   (route) => false);
             },
             icon: const Icon(Icons.home)),
+            actions: [
+              IconButton(onPressed: () {
+                 showDialog(
+                  context: context,
+                  builder: (ctx) {
+                    return AlertDialog(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15)),
+                      title: const Text('Add participant'),
+                      content: TextField(
+                        controller: _personNameController,
+                        decoration: InputDecoration(
+                            hintText: 'Participant name',
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(20))),
+                      ),
+                      actions: [
+                        TextButton(
+                            onPressed: () {
+                              Navigator.of(ctx).pop();
+                            },
+                            child: const Text(
+                              'Cancel',
+                              style: TextStyle(fontSize: 16),
+                            )),
+                        TextButton(
+                            onPressed: () async {
+                              if (_personNameController.text.isEmpty) {
+                                showSnackBar(context, Colors.red,
+                                    "Participant name can't be empty");
+                              } else {
+                                Participants newParticipant = Participants(
+                                    groupName: widget.group.groupName,
+                                    participantName:
+                                        _personNameController.text.trim(),
+                                    amount: 0);
+                                createParticipant(newParticipant);
+                                
+                                Navigator.of(ctx).pop();
+                                _personNameController.clear();
+                              }
+                            },
+                            child: const Text('Add',
+                                style: TextStyle(fontSize: 16)))
+                      ],
+                    );
+                  },
+                );
+                
+              }, icon: Icon(Icons.add))
+            ],
       ),
       body: StreamBuilder<List<Participants>>(
         stream: streamParticipantsFromFirebase(widget.group.groupName),
@@ -95,6 +151,10 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
                           style: const TextStyle(
                               fontSize: 16, fontWeight: FontWeight.bold)),
                     ],
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text('Tap on any name card to pay'),
                   ),
                   SizedBox(
                     height: size.width * .03,
@@ -134,15 +194,31 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
           }
         },
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) =>
-                EditDetailsScreen(group: widget.group, users: users!),
-          ));
-        },
-        label: const Text('Edit details'),
-        icon: const Icon(Icons.edit),
+      floatingActionButton: FutureBuilder(
+        future: getUserTypeByEmail(FirebaseAuth.instance.currentUser!.email!),
+        builder: (context, snapshot) {
+          if(snapshot.connectionState == ConnectionState.waiting){
+            return const SizedBox();
+          }else if(snapshot.hasError){
+            return const SizedBox();
+          }else{
+           final userData = snapshot.data!.data() as Map<String, dynamic>;
+           print(userData['User type']);
+            return Visibility(
+          visible: userData['User type'] != 'User',
+          child: FloatingActionButton.extended(
+            onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) =>
+                    EditDetailsScreen(group: widget.group, users: users!),
+              ));
+            },
+            label: const Text('Edit details'),
+            icon: const Icon(Icons.edit),
+          ),
+        );
+        }}
+       
       ),
     );
   }
