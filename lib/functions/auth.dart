@@ -168,12 +168,15 @@ Future<void> signInWithFacebook() async {
 
       if (user != null) {
         // Successfully logged in with Facebook
+        // ignore: avoid_print
         print("Logged in with Facebook: ${user.displayName}");
       }
     } else {
+      // ignore: avoid_print
       print("Facebook login failed");
     }
   } catch (e) {
+    // ignore: avoid_print
     print("Error: $e");
   }
 }

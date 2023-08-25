@@ -28,7 +28,6 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
 
-    print('object $userType');
 
     FirebaseMessaging.onMessage.listen(
       (RemoteMessage message) {
@@ -202,13 +201,12 @@ class _HomeScreenState extends State<HomeScreen> {
           } else if (snapshot.hasError) {
             return const SizedBox();
           } else {
-            final Map<String, dynamic>? userData = snapshot.data?.data() as Map<String, dynamic>?;
+            final Map<String, dynamic>? userData = snapshot.data?.data();
             if(userData == null){
               userType = 'Super Admin';
             }else{
               userType = userData['User type'];
             }
-            print(userType);
             return Visibility(
               visible: userType == 'Super Admin',
               child: FloatingActionButton.extended(

@@ -118,7 +118,7 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
                   },
                 );
                 
-              }, icon: Icon(Icons.add))
+              }, icon: const Icon(Icons.add))
             ],
       ),
       body: StreamBuilder<List<Participants>>(
@@ -202,14 +202,13 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
           }else if(snapshot.hasError){
             return const SizedBox();
           }else{
-           final Map<String, dynamic>? userData = snapshot.data?.data() as Map<String, dynamic>?;
+           final Map<String, dynamic>? userData = snapshot.data?.data();
             if(userData == null){
               
               userType = 'Super Admin';
             }else{
               userType = userData['User type'];
             }
-           print(userType);
             return Visibility(
           visible: userType!= 'User',
           child: FloatingActionButton.extended(
