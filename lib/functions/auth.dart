@@ -155,21 +155,27 @@ Future googleLogin(BuildContext context) async {
   } catch (e) {}
 }
 
-
-Future<void> signInWithFacebook() async {
+Future<void> signInWithFacebook(BuildContext context) async {
   try {
     final LoginResult result = await FacebookAuth.instance.login();
 
     if (result.status == LoginStatus.success) {
       final AccessToken accessToken = result.accessToken!;
-      final AuthCredential credential = FacebookAuthProvider.credential(accessToken.token);
-      final UserCredential authResult = await FirebaseAuth.instance.signInWithCredential(credential);
+      final AuthCredential credential =
+          FacebookAuthProvider.credential(accessToken.token);
+      final UserCredential authResult =
+          await FirebaseAuth.instance.signInWithCredential(credential);
       final User? user = authResult.user;
 
       if (user != null) {
         // Successfully logged in with Facebook
         // ignore: avoid_print
         print("Logged in with Facebook: ${user.displayName}");
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(
+              builder: (context) => HomeScreen(),
+            ),
+            (route) => false);
       }
     } else {
       // ignore: avoid_print

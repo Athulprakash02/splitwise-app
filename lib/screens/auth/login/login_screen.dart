@@ -78,6 +78,7 @@ class LoginScreen extends StatelessWidget {
                       style: const TextStyle(fontSize: 18),
                       maxLines: 1,
                     )),
+
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -118,7 +119,7 @@ class LoginScreen extends StatelessWidget {
                     ),
                     GestureDetector(
                       onTap: () {
-                        signInWithFacebook();
+                        signInWithFacebook(context);
                       },
                       child: const CircleAvatar(
                         radius: 20,

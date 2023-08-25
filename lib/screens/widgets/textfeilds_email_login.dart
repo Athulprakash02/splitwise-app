@@ -20,20 +20,13 @@ class TextFieldsEmailLogin extends StatelessWidget {
       keyboardType: keyboardType,
       obscureText: obsureText,
       decoration: InputDecoration(
-          // focusColor: Colors.red,
-          // hoverColor: Colors.red,
-          // fillColor: Colors.red,
+          
           filled: true,
           label: Text(
             label,
             style: const TextStyle(fontSize: 18),
           ),
           border: OutlineInputBorder(
-            // borderSide: BorderSide(
-            //   color: Colors.red,
-            //   style: BorderStyle.solid
-
-            // ),
             borderRadius: BorderRadius.circular(20),
           )),
     );
