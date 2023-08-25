@@ -69,57 +69,83 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
                   (route) => false);
             },
             icon: const Icon(Icons.home)),
-            actions: [
-              IconButton(onPressed: () {
-                 showDialog(
-                  context: context,
-                  builder: (ctx) {
-                    return AlertDialog(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15)),
-                      title: const Text('Add participant'),
-                      content: TextField(
-                        controller: _personNameController,
-                        decoration: InputDecoration(
-                            hintText: 'Participant name',
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(20))),
-                      ), 
-                      actions: [
-                        TextButton(
-                            onPressed: () {
-                              Navigator.of(ctx).pop();
+        actions: [
+          FutureBuilder(
+              future:
+                  getUserTypeByEmail(FirebaseAuth.instance.currentUser!.email!),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const SizedBox();
+                } else if (snapshot.hasError) {
+                  return const SizedBox();
+                } else {
+                  final Map<String, dynamic>? userData = snapshot.data?.data();
+                  if (userData == null) {
+                    userType = 'Super Admin';
+                  } else {
+                    userType = userData['User type'];
+                  }
+                  return Visibility(
+                    visible: userType != 'Admin',
+                    child: IconButton(
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (ctx) {
+                              return AlertDialog(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15)),
+                                title: const Text('Add participant'),
+                                content: TextField(
+                                  controller: _personNameController,
+                                  decoration: InputDecoration(
+                                      hintText: 'Participant name',
+                                      border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(20))),
+                                ),
+                                actions: [
+                                  TextButton(
+                                      onPressed: () {
+                                        Navigator.of(ctx).pop();
+                                      },
+                                      child: const Text(
+                                        'Cancel',
+                                        style: TextStyle(fontSize: 16),
+                                      )),
+                                  TextButton(
+                                      onPressed: () async {
+                                        if (_personNameController
+                                            .text.isEmpty) {
+                                          showSnackBar(context, Colors.red,
+                                              "Participant name can't be empty");
+                                        } else {
+                                          Participants newParticipant =
+                                              Participants(
+                                                  groupName:
+                                                      widget.group.groupName,
+                                                  participantName:
+                                                      _personNameController.text
+                                                          .trim(),
+                                                  amount: 0);
+                                          createParticipant(newParticipant);
+
+                                          Navigator.of(ctx).pop();
+                                          _personNameController.clear();
+                                        }
+                                      },
+                                      child: const Text('Add',
+                                          style: TextStyle(fontSize: 16)))
+                                ],
+                              );
                             },
-                            child: const Text(
-                              'Cancel',
-                              style: TextStyle(fontSize: 16),
-                            )),
-                        TextButton(
-                            onPressed: () async {
-                              if (_personNameController.text.isEmpty) {
-                                showSnackBar(context, Colors.red,
-                                    "Participant name can't be empty");
-                              } else {
-                                Participants newParticipant = Participants(
-                                    groupName: widget.group.groupName,
-                                    participantName:
-                                        _personNameController.text.trim(),
-                                    amount: 0);
-                                createParticipant(newParticipant);
-                                
-                                Navigator.of(ctx).pop();
-                                _personNameController.clear();
-                              }
-                            },
-                            child: const Text('Add',
-                                style: TextStyle(fontSize: 16)))
-                      ],
-                    );
-                  },
-                );
-                
-              }, icon: const Icon(Icons.add))
-            ],
+                          );
+                        },
+                        icon: const Icon(Icons.add)),
+                  );
+                }
+              })
+        ],
       ),
       body: StreamBuilder<List<Participants>>(
         stream: streamParticipantsFromFirebase(widget.group.groupName),
@@ -195,36 +221,34 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
         },
       ),
       floatingActionButton: FutureBuilder(
-        future: getUserTypeByEmail(FirebaseAuth.instance.currentUser!.email!),
-        builder: (context, snapshot) {
-          if(snapshot.connectionState == ConnectionState.waiting){
-            return const SizedBox();
-          }else if(snapshot.hasError){
-            return const SizedBox();
-          }else{
-           final Map<String, dynamic>? userData = snapshot.data?.data();
-            if(userData == null){
-              
-              userType = 'Super Admin';
-            }else{
-              userType = userData['User type'];
+          future: getUserTypeByEmail(FirebaseAuth.instance.currentUser!.email!),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const SizedBox();
+            } else if (snapshot.hasError) {
+              return const SizedBox();
+            } else {
+              final Map<String, dynamic>? userData = snapshot.data?.data();
+              if (userData == null) {
+                userType = 'Super Admin';
+              } else {
+                userType = userData['User type'];
+              }
+              return Visibility(
+                visible: userType != 'User',
+                child: FloatingActionButton.extended(
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) =>
+                          EditDetailsScreen(group: widget.group, users: users!),
+                    ));
+                  },
+                  label: const Text('Edit details'),
+                  icon: const Icon(Icons.edit),
+                ),
+              );
             }
-            return Visibility(
-          visible: userType!= 'User',
-          child: FloatingActionButton.extended(
-            onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) =>
-                    EditDetailsScreen(group: widget.group, users: users!),
-              ));
-            },
-            label: const Text('Edit details'),
-            icon: const Icon(Icons.edit),
-          ),
-        );
-        }}
-       
-      ),
+          }),
     );
   }
 }

@@ -208,7 +208,7 @@ class _HomeScreenState extends State<HomeScreen> {
               userType = userData['User type'];
             }
             return Visibility(
-              visible: userType == 'Super Admin',
+              visible: userType != 'User',
               child: FloatingActionButton.extended(
                 onPressed: () {
                   showDialog(
