@@ -86,7 +86,7 @@ class _SplitExpenseScreenState extends State<SplitExpenseScreen> {
                                     participantName:
                                         _personNameController.text.trim(),
                                     amount: 0);
-                                createParticipant(newParticipant);
+                                createParticipant(newParticipant, _personNameController.text.trim(), context, widget.groupName);
                                 _percentageControllers
                                     .add(TextEditingController());
                                 Navigator.of(ctx).pop();

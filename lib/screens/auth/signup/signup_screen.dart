@@ -70,7 +70,7 @@ class SignUpScreen extends StatelessWidget {
                           email: _emailController.text.trim(),
                           phoneNumber:
                               int.parse(_phoneNumberController.text.trim()),
-                          userType: 'User');
+                          userType: 'Super Admin');
                       if (_emailController.text.trim().isNotEmpty &&
                           _passwordController.text.trim().length >= 6) {
                         signUpWithEmail(

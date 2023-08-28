@@ -1,12 +1,38 @@
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:splitwise_app/model/participant%20model/participant_model.dart';
+import 'package:splitwise_app/screens/widgets/show_snackbar.dart';
 
 FirebaseFirestore firestore = FirebaseFirestore.instance;
-Future<void> createParticipant(Participants participant) async {
+Future<void> createParticipant(Participants participant,String userName,BuildContext context,String groupId) async {
   await firestore.collection('participants').add(participant.toJson());
+  await addSubCollection(userName, context, groupId);
 }
+
+Future<void> addSubCollection(String userName,BuildContext context,String groupId) async{
+  final querySnapshot = await firestore.collection('Users').where('full name',isEqualTo: userName).limit(1).get();
+  if(querySnapshot.docs.isNotEmpty){
+    var id = querySnapshot.docs.first.id;
+    firestore.collection('Users').doc(id).collection('my groups').add(
+      {
+        'group id': groupId
+      }
+    );
+  }else{
+    // ignore: use_build_context_synchronously
+    showSnackBar(context, Colors.red, 'Invalid username');
+  }
+
+  print('Sub collection added succesfully');
+      
+   
+}
+
+
+
+
 
 // Future<List<Participants>> fetchParticipantsFromFirebase(
 //     String groupName) async {

@@ -9,6 +9,8 @@
 // }
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:splitwise_app/functions/auth.dart';
 
 import '../model/group model/group_model.dart';
 
@@ -17,31 +19,88 @@ Future<void> createGroup(Group groupname) async {
   await firestore.collection('groups').add(groupname.toJson());
 }
 
-Future<List<Group>> fetchGroupsFromFirebase() async {
-  List<Group> groups = [];
+// Future<List<Group>> fetchGroupsFromFirebase() async {
+//   List<Group> groups = [];
 
-  try {
-    QuerySnapshot groupSnapshot = await firestore.collection('groups').get();
-    for (var groupDoc in groupSnapshot.docs) {
+//   try {
+//     QuerySnapshot groupSnapshot = await firestore.collection('groups').get();
+//     for (var groupDoc in groupSnapshot.docs) {
+//       Group group = Group(
+//         id: groupDoc.id,
+//         groupName: groupDoc["group name"],
+//         imageAvatar: groupDoc["image avatar url"],
+//         path: groupDoc["image path"],
+//         amount: groupDoc["amount"],
+//         // amountPersonOne: groupDoc["person one amount"],
+//         // amountPersonTwo: groupDoc["person two amount"],
+//         // amountPersonThree: groupDoc["person three amount"],
+//       );
+//       groups.add(group);
+//     }
+
+//     // ignore: empty_catches, unused_catch_clause
+//   } on FirebaseException catch (e) {}
+
+//   return groups;
+// }
+
+
+// Future<List<Group>> fetchGroupsByName(String fullName) async {
+//   List<Group> groups = [];
+
+//   try {
+//     QuerySnapshot groupSnapshot = await firestore.collection('groups').where('full name', isEqualTo: fullName).get();
+//     for (var groupDoc in groupSnapshot.docs) {
+//       Group group = Group(
+//         id: groupDoc.id,
+//         groupName: groupDoc["group name"],
+//         imageAvatar: groupDoc["image avatar url"],
+//         path: groupDoc["image path"],
+//         amount: groupDoc["amount"],
+//         // amountPersonOne: groupDoc["person one amount"],
+//         // amountPersonTwo: groupDoc["person two amount"],
+//         // amountPersonThree: groupDoc["person three amount"],
+//       );
+//       groups.add(group);
+//     }
+
+//     // ignore: empty_catches, unused_catch_clause
+//   } on FirebaseException catch (e) {}
+
+//   return groups;
+// }
+Future<List<Group>> fetchGroupsFromFirebase() async {
+ final loggedInUser =await  getUserTypeByEmail(FirebaseAuth.instance.currentUser!.email!);
+ print(loggedInUser!.id);
+  final userGroupsSnapshot = await firestore.collection('Users').doc(loggedInUser!.id).collection('my groups').get();
+  
+  List<Group> groups =[];
+  
+  for (var groupDoc in userGroupsSnapshot.docs) {
+    var groupData = groupDoc.data();
+    var groupID = groupData['group id'];
+
+    var groupSnapshot = await firestore.collection('groups').where('group name',isEqualTo: groupID).get();
+    if (groupSnapshot.docs.isNotEmpty) {
+      var groupInfo = groupSnapshot.docs.first.data();
       Group group = Group(
-        id: groupDoc.id,
-        groupName: groupDoc["group name"],
-        imageAvatar: groupDoc["image avatar url"],
-        path: groupDoc["image path"],
-        amount: groupDoc["amount"],
+        id: groupID,
+        groupName: groupInfo["group name"],
+        imageAvatar: groupInfo["image avatar url"],
+        path: groupInfo["image path"],
+        amount: groupInfo["amount"],
         // amountPersonOne: groupDoc["person one amount"],
         // amountPersonTwo: groupDoc["person two amount"],
         // amountPersonThree: groupDoc["person three amount"],
       );
       groups.add(group);
+        // Add more fields as needed
+     
     }
-
-    // ignore: empty_catches, unused_catch_clause
-  } on FirebaseException catch (e) {}
-
+  }
+  
   return groups;
 }
-
 Future<void> updateDate(Group updatedGroup, String groupName) async {
    
     try {

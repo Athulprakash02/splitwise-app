@@ -128,7 +128,7 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
                                                       _personNameController.text
                                                           .trim(),
                                                   amount: 0);
-                                          createParticipant(newParticipant);
+                                          createParticipant(newParticipant, _personNameController.text.trim(), context, widget.group.groupName);
 
                                           Navigator.of(ctx).pop();
                                           _personNameController.clear();

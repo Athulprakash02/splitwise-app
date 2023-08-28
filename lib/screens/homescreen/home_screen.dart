@@ -14,6 +14,8 @@ import 'package:splitwise_app/screens/widgets/show_snackbar.dart';
 
 var userType = '';
 
+ Map<String, dynamic>? userData;
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -24,6 +26,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final TextEditingController _groupNameController = TextEditingController();
   bool visibility = false;
+
   @override
   void initState() {
     super.initState();
@@ -130,7 +133,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       body: FutureBuilder<List<Group>>(
-        future: fetchGroupsFromFirebase(),
+        future:fetchGroupsFromFirebase(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
@@ -190,7 +193,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   separatorBuilder: (context, index) => const Divider(),
                   itemCount: snapshot.data!.length),
             );
-          }
+          } 
         },
       ),
       floatingActionButton: FutureBuilder(
@@ -201,11 +204,11 @@ class _HomeScreenState extends State<HomeScreen> {
           } else if (snapshot.hasError) {
             return const SizedBox();
           } else {
-            final Map<String, dynamic>? userData = snapshot.data?.data();
+             userData = snapshot.data?.data();
             if(userData == null){
               userType = 'Super Admin';
             }else{
-              userType = userData['User type'];
+              userType = userData!['User type'];
             }
             return Visibility(
               visible: userType != 'User',
