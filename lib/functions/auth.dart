@@ -171,9 +171,10 @@ Future<void> signInWithFacebook(BuildContext context) async {
         // Successfully logged in with Facebook
         // ignore: avoid_print
         print("Logged in with Facebook: ${user.displayName}");
+        // ignore: use_build_context_synchronously
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(
-              builder: (context) => HomeScreen(),
+              builder: (context) => const HomeScreen(),
             ),
             (route) => false);
       }

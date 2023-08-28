@@ -6,33 +6,32 @@ import 'package:splitwise_app/model/participant%20model/participant_model.dart';
 import 'package:splitwise_app/screens/widgets/show_snackbar.dart';
 
 FirebaseFirestore firestore = FirebaseFirestore.instance;
-Future<void> createParticipant(Participants participant,String userName,BuildContext context,String groupId) async {
+Future<void> createParticipant(Participants participant, String userName,
+    BuildContext context, String groupId) async {
   await firestore.collection('participants').add(participant.toJson());
+  // ignore: use_build_context_synchronously
   await addSubCollection(userName, context, groupId);
 }
 
-Future<void> addSubCollection(String userName,BuildContext context,String groupId) async{
-  final querySnapshot = await firestore.collection('Users').where('full name',isEqualTo: userName).limit(1).get();
-  if(querySnapshot.docs.isNotEmpty){
+Future<void> addSubCollection(
+    String userName, BuildContext context, String groupId) async {
+  final querySnapshot = await firestore
+      .collection('Users')
+      .where('full name', isEqualTo: userName)
+      .limit(1)
+      .get();
+  if (querySnapshot.docs.isNotEmpty) {
     var id = querySnapshot.docs.first.id;
-    firestore.collection('Users').doc(id).collection('my groups').add(
-      {
-        'group id': groupId
-      }
-    );
-  }else{
+    firestore
+        .collection('Users')
+        .doc(id)
+        .collection('my groups')
+        .add({'group id': groupId});
+  } else {
     // ignore: use_build_context_synchronously
     showSnackBar(context, Colors.red, 'Invalid username');
   }
-
-  print('Sub collection added succesfully');
-      
-   
 }
-
-
-
-
 
 // Future<List<Participants>> fetchParticipantsFromFirebase(
 //     String groupName) async {
@@ -56,36 +55,36 @@ Future<void> addSubCollection(String userName,BuildContext context,String groupI
 Stream<List<Participants>>? streamParticipantsFromFirebase(String groupName) {
   try {
     return firestore
-      .collection('participants')
-      .where('group name', isEqualTo: groupName)
-      .snapshots()
-      .map((querySnapshot) => querySnapshot.docs.map((doc) {
-            return Participants(
-              groupName: doc['group name'],
-              participantName: doc['partcipant name'],
-              amount: doc['amount'],
-            );
-          }).toList());
-  }on FirebaseException catch (e) {
+        .collection('participants')
+        .where('group name', isEqualTo: groupName)
+        .snapshots()
+        .map((querySnapshot) => querySnapshot.docs.map((doc) {
+              return Participants(
+                groupName: doc['group name'],
+                participantName: doc['partcipant name'],
+                amount: doc['amount'],
+              );
+            }).toList());
+  } on FirebaseException catch (e) {
     log(e.message as num);
-    
+
     return null;
-    
   }
 }
-Future<void> updateDataInFirestore( List newValue,String groupName) async {
+
+Future<void> updateDataInFirestore(List newValue, String groupName) async {
   QuerySnapshot querySnapshot = await firestore
       .collection('participants') // Replace with your actual collection name
       .where('group name', isEqualTo: groupName) // Replace with your condition
       .get();
-      for (int i = 0; i < querySnapshot.docs.length; i++) {
-  QueryDocumentSnapshot doc = querySnapshot.docs[i];
-  
-  // Update the specific field with the new value
-  await doc.reference.update({
-    'amount': newValue[i],
-  });
-}
+  for (int i = 0; i < querySnapshot.docs.length; i++) {
+    QueryDocumentSnapshot doc = querySnapshot.docs[i];
+
+    // Update the specific field with the new value
+    await doc.reference.update({
+      'amount': newValue[i],
+    });
+  }
   // Loop through the documents in the query result and update the field
   // for (QueryDocumentSnapshot doc in querySnapshot.docs) {
   //   // Update the specific field with the new value

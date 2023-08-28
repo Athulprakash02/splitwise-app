@@ -71,7 +71,6 @@ Future<void> createGroup(Group groupname) async {
 // }
 Future<List<Group>> fetchGroupsFromFirebase() async {
  final loggedInUser =await  getUserTypeByEmail(FirebaseAuth.instance.currentUser!.email!);
- print(loggedInUser!.id);
   final userGroupsSnapshot = await firestore.collection('Users').doc(loggedInUser!.id).collection('my groups').get();
   
   List<Group> groups =[];
